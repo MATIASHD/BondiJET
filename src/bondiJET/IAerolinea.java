@@ -1,4 +1,4 @@
-package bondiJET;
+package AppSource;
 
 import java.util.List;
 import java.util.Map;
@@ -8,7 +8,11 @@ import java.util.Map;
  *
  */
 
-public interface IAerolinea {
+public abstract interface IAerolinea {
+/**
+	* 1 constructor
+	Aerolinea(String nombre, String CUIT);
+*/
 
 	/**
 	* - 2

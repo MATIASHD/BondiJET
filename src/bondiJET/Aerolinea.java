@@ -1,30 +1,35 @@
-package bondiJET;
+package AppSource;
 
 import java.util.*;
-import java.util.Map;
 
 public class Aerolinea implements IAerolinea {
-	
 
-	public Aerolinea(String nombre, String CUIT) {
-		
-		this.nombre = nombre;
-		this.cuit = CUIT;
-		
-	}
+    public Aerolinea(String nombre, String cuit){
+
+        this.nombre = nombre;
+        this.cuit = cuit;
+
+        this.aeropuertos = new HashMap<String, Aeropuerto>();
+        this.vuelos = new LinkedList<Vuelo>();
+        this.clientes = new LinkedList<Cliente>();
+    }
 
     String nombre;
     String cuit;
-    LinkedList<Aeropuerto> aeropuertos;
+    HashMap<String, Aeropuerto> aeropuertos;
     LinkedList<Vuelo> vuelos;
     LinkedList<Cliente> clientes;
-
+    
     public void registrarCliente(int dni, String nombre, String telefono) {
+
+        clientes.add(new Cliente(dni, nombre, telefono));
 
     }
 
     public void registrarAeropuerto(String nombre, String pais, String provincia, String direccion) {
     
+        aeropuertos.put(nombre, new Aeropuerto(nombre, pais, provincia, direccion));
+
     }
 
     public String registrarVueloPublicoNacional(String origen, String destino, String fecha, int tripulantes,
@@ -83,5 +88,60 @@ public class Aerolinea implements IAerolinea {
         return "";
     }
 
+/*
+    public void CrearAerolinea(String nombre, int cuit){
 
+    }
+
+    public void RegistrarCliente(String nombre, int teléfono, int DNI){
+
+    }
+
+    public void RegistrarAeropuerto(String nombre, String provincia, String direccion){
+
+    }
+
+    public void RegistrarVueloNacional(){
+
+    }
+
+    public void RegistrarVueloInternacional(){
+
+    }
+
+    public void RegistrarVueloPrivado(Cliente cliente, LinkedList<Cliente> listaDeClientes){
+
+    }
+
+    public String DameAsientosDisponibles(int codigoDelVuelo){
+
+        return "";
+    }
+
+    public void VenderPasajeNacional(int dniPasajero, int codigoVuelo, int numAsiento, int seccion){
+
+        return;
+    }
+
+    public void VenderPasajeInternacional( int dniPasajero, int codigoVuelo, int numAsiento, int seccion ){
+
+    }
+
+    public Vuelo BuscarVuelo(int codigoDeVuelo){
+
+        return null;
+    }
+
+    public void CancelarPasaje(Vuelo vuelo, Cliente pasajero, int asiento){
+
+    }
+
+    public void CancelarVuelo(){
+        
+    }
+
+    public void RecaudadoPorDestino(){
+
+    }
+*/
 }
