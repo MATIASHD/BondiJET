@@ -1,4 +1,4 @@
-package AppSource;
+package bondiJET;
 
 import java.util.List;
 import java.util.Map;
@@ -24,8 +24,8 @@ public class Principal {
         aerolinea.registrarAeropuerto("JFK", "Estados Unidos", "Estado de Nueva York", "Queens, NY 11430");
 		aerolinea.registrarAeropuerto("Guarulhos", "Brasil", "São Paulo", "Rod. Hélio Smidt, s/n - Cumbica, Guarulhos");
 
-        aerolinea.aeropuertos.get("Aeroparque").setRecaudacion(2000000.20);
-        System.out.println("Recaudación de Aeroparque: $" + aerolinea.aeropuertos.get("Aeroparque").getRecaudacion()); //Prueba del diccionario de aviones. (Facundo)
+        aerolinea.getAeropuerto("Aeroparque").setRecaudacion(2000000.20);
+        System.out.println("Recaudación de Aeroparque: $" + aerolinea.getAeropuerto("Aeroparque").getRecaudacion()); //Prueba del diccionario de aviones. (Facundo)
 
         // Registrar clientes
         aerolinea.registrarCliente(12345678, "Juan Perez", "011-1234-5678");

@@ -1,4 +1,3 @@
-/**
 package bondiJET;
 
 import static org.junit.Assert.*;
@@ -268,6 +267,5 @@ public class AerolineaTest {
 	    String esperadoPrivado = String.format("%s - Aeroparque - Bariloche - 07/01/2025 - PRIVADO (1)", codVueloPrivado);
 		assertEquals(esperadoPrivado, aerolinea.detalleDeVuelo(codVueloPrivado));
 	}
-
+		
 }
-**/

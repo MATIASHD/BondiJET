@@ -1,4 +1,4 @@
-package AppSource;
+package bondiJET;
 
 public class Asiento {
 	//Atributo

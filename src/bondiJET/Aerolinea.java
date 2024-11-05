@@ -1,4 +1,4 @@
-package AppSource;
+package bondiJET;
 
 import java.util.*;
 
@@ -19,7 +19,13 @@ public class Aerolinea implements IAerolinea {
         this.clientes = new LinkedList<Cliente>();
     }
 
-   //Metodo
+   //Metodos
+    
+    public Aeropuerto getAeropuerto(String key){
+    	
+    	return aeropuertos.get(key);
+    	
+    }
     
     public void registrarCliente(int dni, String nombre, String telefono) {
 
