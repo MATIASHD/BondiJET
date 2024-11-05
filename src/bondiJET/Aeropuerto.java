@@ -1,7 +1,14 @@
 package AppSource;
 
 public class Aeropuerto {
+	//Atributo
+	private String nombre;
+    private String pais;
+    private String provincia;
+    private String direccion;
+    private Double recaudacion;
 
+    //Constructor
     public Aeropuerto(String nombre, String pais, String provincia, String direccion) {
     
         if(nombre.length() > 0) this.nombre = nombre;
@@ -12,12 +19,7 @@ public class Aeropuerto {
 
     }
 
-    String nombre;
-    String pais;
-    String provincia;
-    String direccion;
-    Double recaudacion;
-
+    //Metodo
     public void nuevoAeropuerto(){
         
     }

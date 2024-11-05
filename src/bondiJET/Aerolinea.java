@@ -3,22 +3,23 @@ package AppSource;
 import java.util.*;
 
 public class Aerolinea implements IAerolinea {
-
+	//Atributo
+	private String nombre;
+	private String cuit;
+	private HashMap<String, Aeropuerto> aeropuertos;
+	private LinkedList<Vuelo> vuelos;
+	private LinkedList<Cliente> clientes;
+	
+	//Constructor
     public Aerolinea(String nombre, String cuit){
-
         this.nombre = nombre;
         this.cuit = cuit;
-
         this.aeropuertos = new HashMap<String, Aeropuerto>();
         this.vuelos = new LinkedList<Vuelo>();
         this.clientes = new LinkedList<Cliente>();
     }
 
-    String nombre;
-    String cuit;
-    HashMap<String, Aeropuerto> aeropuertos;
-    LinkedList<Vuelo> vuelos;
-    LinkedList<Cliente> clientes;
+   //Metodo
     
     public void registrarCliente(int dni, String nombre, String telefono) {
 

@@ -3,7 +3,12 @@ package AppSource;
 import java.util.*;
 
 public class Pasajero {
-
+	//Atributo
+	private Cliente cliente;
+    private LinkedList<Asiento> asientos;
+    private int refrigeriosConsumidos;
+    
+    //Constructor
     public Pasajero(Cliente cliente, Asiento asiento){
 
         this.asientos = new LinkedList<Asiento>();
@@ -14,10 +19,7 @@ public class Pasajero {
 
     }
 
-    Cliente cliente;
-    LinkedList<Asiento> asientos;
-    int refrigeriosConsumidos;
-
+    //Metodo
     public void AsignarAsiento(Asiento asiento){
 
         asientos.add(asiento);

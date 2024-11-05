@@ -3,7 +3,12 @@ package AppSource;
 import java.util.*;
 
 public class Cliente {
+	//Atributo
+	private int dni;
+    private String nombre;
+    private String telefono;
 
+    //Constructor
     public Cliente(int dni, String nombre, String telefono){
 
         if(dni > 0) this.dni = dni;
@@ -12,10 +17,7 @@ public class Cliente {
 
     }
 
-    int dni;
-    String nombre;
-    String telefono;
-
+    //Metodo
     public int getDni(){
         
         return dni;

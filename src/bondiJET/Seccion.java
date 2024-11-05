@@ -4,11 +4,18 @@ import java.util.LinkedList;
 
 public class Seccion {
 
-    String nombreDelAera;
-    int numeroDeSeccion;
-    double precio;
-    LinkedList<Asiento> asientos;
+	//Atributo
+    private String nombreDelAera;
+    private int numeroDeSeccion;
+    private double precio;
+    private LinkedList<Asiento> asientos;
 
+    //Construtor
+    public Seccion() {
+    	
+    }
+    
+    //Metodo
     public int ObtenerNumeroDeSeccion(){
         
         return 0;

@@ -3,7 +3,17 @@ package AppSource;
 import java.util.*;
 
 public abstract class Vuelo{
-
+	//Atributo
+	private int codigoDelVuelo;
+    private int cantidadDeTripulantes;
+    private Aeropuerto origen;
+    private Aeropuerto destino;
+    private Date fechaYhoraDeSalida;
+    private Date fechaYhoraDeLlegada;
+    private LinkedList<Pasajero> pasajeros;
+    private int impuesto;
+    
+    //Constructor
     public Vuelo(int cantidadDeTripulantes, Aeropuerto origen, Aeropuerto destino, Date Salida, Date Llegada,
                 int cantidadDeAsientos){
 
@@ -15,15 +25,7 @@ public abstract class Vuelo{
 
     }
 
-    private int codigoDelVuelo;
-    private int cantidadDeTripulantes;
-    private Aeropuerto origen;
-    private Aeropuerto destino;
-    private Date fechaYhoraDeSalida;
-    private Date fechaYhoraDeLlegada;
-    private LinkedList<Pasajero> pasajeros;
-    private int impuesto;
-
+    //Metodo
     public double obtenerValorDelPasaje(Seccion area){
 
         return 0;

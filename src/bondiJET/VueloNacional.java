@@ -3,7 +3,11 @@ package AppSource;
 import java.util.*;
 
 public class VueloNacional extends Vuelo implements IVuelosPublicos{
-
+	
+	//Atributos
+	private LinkedList<Seccion> secciones;
+	
+	//Constructor
     public VueloNacional(int cantidadDeTripulantes, Aeropuerto origen, Aeropuerto destino, Date salida, Date llegada,
                                 int cantidadDeAsientos){
 
@@ -12,8 +16,8 @@ public class VueloNacional extends Vuelo implements IVuelosPublicos{
         this.secciones = new LinkedList<Seccion>();
     }
 
-    LinkedList<Seccion> secciones;
-
+    
+    //Metodos
     @Override
     public void obtenerAsientosDisponibles() {
         

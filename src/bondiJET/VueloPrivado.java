@@ -3,7 +3,16 @@ package AppSource;
 import java.util.*;
 
 public class VueloPrivado extends Vuelo{
-
+	
+	//Atributos
+	private Cliente comprador;
+    private LinkedList<Cliente> acompañantes;
+    private int cantidadDeJets;
+    private double PrecioPorJet;
+    private int cantidadDeAsientosPorJet;
+    private double costeTotal;
+    
+    //Constructor
     public VueloPrivado(Cliente comprador, LinkedList<Cliente> acompañantes, double precio,
                         int cantidadDeTripulantes, Aeropuerto origen, Aeropuerto destino, Date salida, Date llegada){
 
@@ -19,13 +28,8 @@ public class VueloPrivado extends Vuelo{
     
     }
 
-    private Cliente comprador;
-    private LinkedList<Cliente> acompañantes;
-    private int cantidadDeJets;
-    private double PrecioPorJet;
-    private int cantidadDeAsientosPorJet;
-    private double costeTotal;
-
+    
+    //Metodos
     private int calcularJetsNecesarios(int cantidadDeAcompañantes){
         
         int resultado = 0;
