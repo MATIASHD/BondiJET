@@ -1,57 +1,35 @@
 package bondiJET;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Seccion {
 
 	//Atributo
-    private String nombreDelAera;
-    private int numeroDeSeccion;
+    private String nombre;
     private double precio;
-    private LinkedList<Asiento> asientos;
+    private ArrayList<Asiento> asientos;
 
     //Construtor
-    public Seccion() {
-    	
+    public Seccion(String nombre, double precio) {
+    	this.nombre = nombre;
+    	this.precio = precio;
+    	this.asientos = new  ArrayList<>();
     }
     
     //Metodo
-    public int ObtenerNumeroDeSeccion(){
-        
-        return 0;
+    public String ObtenerNombreDeLaSeccion(){
+        return this.nombre;
     }
-    public double Precio(){
-        
-        return 0;
+    public double ObtenerPrecio(){
+        return this.precio;
     }
-    public LinkedList<Asiento> ObtenerListaDeAsientos(){
-        
-        return null;
-    }
-    public void ObtenerCantidadDeAsientos(){
-
-    }
-        
-    public String obtenerAsientosDisponibles(){
-
-        for (Asiento asiento : asientos) {
-            
-            if(asiento.estaLibre) System.out.println(asiento.toString());
-
-        }
-
-        return "";
-
-    }
-
-    public void AgregarAsiento(){
-        
-    }
-
-    @Override
-    public String toString() {
-        
-        return nombreDelAera + " " + numeroDeSeccion + " $" + precio;
+    public ArrayList<Asiento> ObtenerListaDeAsientos(){
+        return asientos;
     }
     
+    public void agregarAsiento(Asiento asiento) {
+    	asientos.add(asiento);
+    }
+        
 }

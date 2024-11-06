@@ -3,7 +3,7 @@ package bondiJET;
 import java.util.*;
 
 public class VueloPrivado extends Vuelo{
-	
+	//"Aeroparque", "Bariloche", "07/01/2025", 4, 450000, 98765432, acompaniantes
 	//Atributos
 	private Cliente comprador;
     private LinkedList<Cliente> acompañantes;

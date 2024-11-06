@@ -3,28 +3,18 @@ package bondiJET;
 public class Asiento {
 	//Atributo
     int numeroDeAsiento;
-    boolean estaLibre;
 
     //Constructor
-    public Asiento() {
-    	
+    public Asiento(int numAsiento) {
+    	this.numeroDeAsiento = numAsiento;
     }
     
     //Metodo
-    public int obtenerNumeroDeAsiento(){
-        
-        return 0;
+    public int obtenerNumAsiento(){
+        return this.numeroDeAsiento;
     }
     
-    public void asignarAsiento(){
-        
+    public void cambiarNumAsiento(int numAsiento) {
+    	this.numeroDeAsiento = numAsiento;
     }
-
-    @Override
-    public String toString() {
-        
-        return "" + numeroDeAsiento + "";
-
-    }
-
 }

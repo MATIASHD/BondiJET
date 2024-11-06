@@ -5,42 +5,47 @@ import java.util.*;
 public class Pasajero {
 	//Atributo
 	private Cliente cliente;
-    private LinkedList<Asiento> asientos;
     private int refrigeriosConsumidos;
+    private ArrayList<Asiento> asientosAsignados;
     
     //Constructor
-    public Pasajero(Cliente cliente, Asiento asiento){
-
-        this.asientos = new LinkedList<Asiento>();
-        this.refrigeriosConsumidos = 0;
-
-        this.cliente = cliente;
-        this.asientos.add(asiento);
-
+    public Pasajero(Cliente cliente) {
+    	this.cliente = cliente;
+        this.asientosAsignados = new ArrayList<>();
     }
 
     //Metodo
-    public void AsignarAsiento(Asiento asiento){
-
-        asientos.add(asiento);
-
+    public void asignarAsiento(Asiento asiento){
+        this.asientosAsignados.add(asiento);
     }
+    public Asiento isAsientoAsignado(int numeroDeAsiento){
+        for (Asiento asiento : this.asientosAsignados) {
+            if(asiento.obtenerNumAsiento() == numeroDeAsiento) {
+            	return asiento;
+            }
+        }
+        return null;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     public Cliente ObtenerPasajero(){
         
         return cliente;
     }
+    
 
-    public Asiento ObtenerAsiento(int numeroDeAsiento){
-        
-        for (Asiento var : asientos) {
-            
-            if(var.numeroDeAsiento == numeroDeAsiento) return var; 
-
-        }
-
-        return null;
-    }
+    
 
     public void AsignarRefrigerio(int consumision){
 

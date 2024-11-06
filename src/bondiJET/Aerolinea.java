@@ -40,15 +40,50 @@ public class Aerolinea {
     }
     
     public int venderPasaje(int dni, int codVuelo, int nroAsiento, boolean isOcupado) {
+    	Cliente cliente = BuscarCliente(dni);
+    	Pasajero pasajero = new Pasajero(cliente);
     	//El cliente esta registrado y BuscarCodigo de vuelo
     	if(buscarRegistrado(dni) && buscarCodVuelo(codVuelo)) {
-    		
+    		if(buscarNumAsiento(codVuelo, nroAsiento)) {
+    			////////////////////////
+    			/// SE VENDE EL PASAJE
+    			////////////////////////
+    			for (Vuelo vuelo : vuelos){
+        			if(vuelo.obtenerCodVuelo() == codVuelo) {
+        				vuelo.obtenerListaDePasajeros().add(pasajero.asignarAsiento(nroAsiento));
+        			}
+        		}
+    		}
     	
     		
     	}
-    	//BuscarNumeroDeAsiento
-    	//VerificarSi estáOcupado
-        return 0;
+
+    }
+    
+    
+    
+    
+    public boolean buscarNumAsiento(int codVuelo, int nroAsiento) {
+    	if(buscarCodVuelo(codVuelo)) {
+    		for (Vuelo vuelo : vuelos){
+    			//Si alguien tiene asignado el asiento, entonces no está disponible
+    			if(vuelo.obtenerCodVuelo() == codVuelo && estaDisponibleElAsiento(vuelo, nroAsiento)) {
+    				return true;
+    			}
+    		}
+    		return false;
+    	}
+    	return false;
+    }
+  //VerificarSi estáOcupado
+    public boolean estaDisponibleElAsiento(Vuelo vuelo, int numAsiento) {
+    	for(Pasajero pasajero: vuelo.obtenerListaDePasajeros()) {
+    		//BuscarNumeroDeAsiento
+    		if(pasajero.isAsientoAsignado(numAsiento) == null) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
     
     public boolean buscarRegistrado(int dni) {
@@ -59,11 +94,21 @@ public class Aerolinea {
 		}
     	return false;
     }
+    
+    public Cliente BuscarCliente(int dni) {
+    	for (Cliente cliente : clientes) {
+			if(cliente.obtenerDNI() == dni) {
+				return cliente;
+			}
+		}
+    	return null;
+    }
+    
     public boolean buscarCodVuelo(int codVuelo) {
     	if(codVuelo < 0 || codVuelo >= vuelos.size()) {
     		return false;
     	}
-    	if(vuelos.get(codVuelo) != null ) {
+    	if(vuelos.get(codVuelo) != null) {
     		return true;
     	} 
     	return false;
