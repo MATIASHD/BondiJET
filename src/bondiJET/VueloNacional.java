@@ -8,8 +8,7 @@ public class VueloNacional extends Vuelo implements IVuelosPublicos{
 	private LinkedList<Seccion> secciones;
 	
 	//Constructor
-    public VueloNacional(int cantidadDeTripulantes, Aeropuerto origen, Aeropuerto destino, Date salida, Date llegada,
-                                int cantidadDeAsientos){
+    public VueloNacional(String origen, String destino, String fecha, int tripulantes, double valorRefrigerio, double[] precios, int[] cantAsientos){
 
         super(cantidadDeTripulantes, origen, destino, salida, llegada, cantidadDeAsientos);
 
