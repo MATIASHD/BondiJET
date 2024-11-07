@@ -54,5 +54,27 @@ public abstract class Vuelo{
     public int obtenerImpuestos() {
     	return this.impuesto;
     }
-
+    public Pasajero buscarPasajeroPorDNI(int dni) {
+    	for (Pasajero pasajero : pasajeros) {
+			if (pasajero.obtenerCliente().obtenerDNI() == dni) {
+				return pasajero;
+			}
+		}
+    	return null;
+    }
+    public Pasajero buscarPasajeroPorAsiento(int nroAsiento) {
+    	for (Pasajero pasajero : pasajeros) {
+			if (pasajero.estaElAasiento(nroAsiento)) {
+				return pasajero;
+			}
+		}
+    	return null;
+    }
+    public double refrigerioTotalPorVuelo() {
+    	double refrigerioTotal = 0;
+    	for (Pasajero pasajero : pasajeros) {
+			refrigerioTotal += pasajero.ObtenerRefrigerio();
+		}
+    	return refrigerioTotal;
+    }
 }

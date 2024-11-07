@@ -20,5 +20,10 @@ public class VueloInternacional extends Vuelo{
 		this.valorSecciones = new double[2];
 		this.maxCantPasajero = 0;
 	}
+	
+	public double precioTotal() {
+    	return (this.obtenerImpuestos() *(this.ValorRefrigerio* this.refrigerioTotalPorVuelo()))/100 ;
+    
+    }
 
 }

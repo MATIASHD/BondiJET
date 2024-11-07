@@ -28,7 +28,8 @@ public class VueloPrivado extends Vuelo{
     public void sumarJet() {
     	this.cantidadDeJets++;
     }
-
-  
-
+    public double precioTotal() {
+    	return (this.obtenerImpuestos() * (this.PrecioPorJet * this.cantidadDeJets))/100 ;
+    
+    }
 }

@@ -24,22 +24,25 @@ public class Pasajero {
     	}
     	return false;
     }
-  
     public void asignarAsiento(Asiento asiento){
         this.asientosAsignados.add(asiento);
     }
-    
     public Cliente obtenerCliente() {
     	return cliente;
     }
-
-
     public void AsignarRefrigerio(int consumision){
         refrigeriosConsumidos = consumision;
     }
 
     public int ObtenerRefrigerio(){
         return refrigeriosConsumidos;
+    }
+    public void QuitarAsiento(int codAsiento) {
+    	for (Asiento asiento : asientosAsignados) {
+			if(asiento.obtenerNumAsiento() == codAsiento) {
+				asiento = null;
+			}
+		}
     }
 
 }

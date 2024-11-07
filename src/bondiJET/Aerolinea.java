@@ -21,6 +21,7 @@ public class Aerolinea {
 	private List<Aeropuerto> aeropuertos;
 	private List<Vuelo> vuelos;
 	private List<Cliente> clientes;
+	private StringBuilder sb = new StringBuilder();
 	
 	//Constructor
     public Aerolinea(String nombre, String cuit){
@@ -111,7 +112,7 @@ public class Aerolinea {
     	if(buscarCodVuelo(codVuelo)) {
     		for (Vuelo vuelo : vuelos){
     			//Si alguien tiene asignado el asiento, entonces no está disponible
-    			if(vuelo.obtenerCodVuelo() == codVuelo && estaDisponibleElAsiento(vuelo, nroAsiento)) {
+    			if(vuelo.obtenerCodDelVuelo() == codVuelo && isDisponibleElAsiento(vuelo, nroAsiento)) {
     				return true;
     			}
     		}
@@ -121,13 +122,12 @@ public class Aerolinea {
     }
     
   //VerificarSi estáOcupado
-    public boolean asientosDisponibles(String codVuelo) {
-    	for(Pasajero pasajero: vuelo.obtenerListaDePasajeros()) {
-    		//BuscarNumeroDeAsiento
-    		if(pasajero.isAsientoAsignado(numAsiento) == null) {
-    			return true;
-    		}
-    	}
+    public boolean isDisponibleElAsiento(Vuelo vuelo, int nroAsiento) {
+    	for (Pasajero pasajero : vuelo.obtenerListaDePasajero()) {
+			if(pasajero.estaElAasiento(nroAsiento)) {
+				return true;
+			}
+		}
     	return false;
     }
     
@@ -203,16 +203,35 @@ public class Aerolinea {
 
     }
     //11
-    public List<String> consultarVuelosSimilares(String origen, String destino, String Fecha) {
+    public List<String> consultarVuelosSimilares(String origen, String destino, String fecha) {
+    	List<String> vueloList = new ArrayList<>();
+    	for (Vuelo vuelos : this.vuelos) { // Falta sumar los 7 dias
+			if (vuelos.obtenerOrigen() == origen && vuelos.obtenerDestino() == destino && vuelos.obtenerFechaDelDespegue() == fecha) {
+				vueloList.add(String.valueOf(vuelos.obtenerCodDelVuelo()));
+			}
+		}
     	//Devulve una lista con la lista de los vuelos similares por origen, destino y los proximos 7 dias
-        return null;
+        return vueloList;
     }
+    
     //12
     //Tiene que ser O(1)
     public void cancelarPasaje(int dni, String codVuelo, int nroAsiento) {
-    //Vuelve a estar a la venta
-    //Pasajero cliente registrado
+    	//Pasajero cliente registrado
+    	if (buscarRegistrado(dni) && buscarCodVuelo(Integer.parseInt(codVuelo))) {
+    		//Vuelve a estar a la venta
+    		cancelarPass(dni, codVuelo, nroAsiento);
+		}
     }
+    
+    public void cancelarPass(int dni, String codVuelo, int nroAsiento) {
+    	for (Vuelo vuelo : vuelos) {
+			if (vuelo.obtenerCodDelVuelo() == Integer.parseInt(codVuelo)) {
+				vuelo.buscarPasajeroPorDNI(dni).QuitarAsiento(nroAsiento);
+			}
+		}
+    }
+    
     //13
     public List<String> cancelarVuelo(String codVuelo) {
     	//reprogramar Cambiar fecha
@@ -222,23 +241,30 @@ public class Aerolinea {
     }
     //14
     public double totalRecaudado(String destino) {
+    	double recaudacion = 0;
+    	for (Vuelo vuelo : this.vuelos) {
+			if(vuelo.obtenerDestino() == destino) {
+				recaudacion += vuelo.precioTotal();
+			}
+		}
         return 0;
     }
     
     public String detalleDeVuelo(String codVuelo) {
-    	StringBuilder sb = new StringBuilder();
-    	
-    	return "";
-    	public class EjemploStringBuilder { //Usar StringBuilder para detalle
-    	    public static void main(String[] args) {
-    	        
-    	        sb.append("Hola");
-    	        sb.append(" ");
-    	        sb.append("Mundo");
-    	        
-    	        System.out.println(sb.toString()); // Salida: Hola Mundo
-    	    }
+    	if(buscarCodVuelo(Integer.parseInt(codVuelo))) {
+    		for (Vuelo vuelo : this.vuelos) {
+				if(vuelo.obtenerCodDelVuelo() == Integer.parseInt(codVuelo)) {
+					sb.append("Código del Vuelo: " + vuelo.obtenerCodDelVuelo());
+					sb.append("Destino: " + vuelo.obtenerDestino());
+					sb.append("Origen: " + vuelo.obtenerOrigen());
+					sb.append("Fecha de despegue: " + vuelo.obtenerFechaDelDespegue());
+					sb.append("Fecha de arrivo: " + vuelo.obtenerFechaDeArrivo());
+					sb.append("Impuesto: " + vuelo.obtenerImpuestos());
+				}
+			}	
     	}
+    	
+    	return sb.toString();
     }
     
    /*
@@ -266,23 +292,9 @@ public class Aerolinea {
 		}
     	return false;
     }
-    
-    
-    
-    public Aeropuerto getAeropuerto(String key){  	
-    	return aeropuertos.get(key);
-    }
-    
-    
-    
+ 
     public Map<Integer, String> asientosDisponibles(String codVuelo) {
         return null;
     }
-    
-    
-    
-    
-    
-    
-    
+   
 }

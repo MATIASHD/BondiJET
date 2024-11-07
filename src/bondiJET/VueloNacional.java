@@ -18,6 +18,9 @@ public class VueloNacional extends Vuelo {
         this.maxCantPasajero = 0;
     }
 
-
+    public double precioTotal() {
+    	return (this.obtenerImpuestos() *(this.ValorRefrigerio* this.refrigerioTotalPorVuelo()))/100 ;
+    
+    }
 
 }
