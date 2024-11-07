@@ -6,105 +6,29 @@ public class VueloPrivado extends Vuelo{
 	//"Aeroparque", "Bariloche", "07/01/2025", 4, 450000, 98765432, acompaniantes
 	//Atributos
 	private Cliente comprador;
-    private LinkedList<Cliente> acompañantes;
+    private List<Cliente> acompañantes;
     private int cantidadDeJets;
     private double PrecioPorJet;
     private int cantidadDeAsientosPorJet;
-    private double costeTotal;
     
     //Constructor
-    public VueloPrivado(Cliente comprador, LinkedList<Cliente> acompañantes, double precio,
-                        int cantidadDeTripulantes, Aeropuerto origen, Aeropuerto destino, Date salida, Date llegada){
-
-        super(cantidadDeTripulantes, origen, destino, salida, llegada, acompañantes.size());
-
+    public VueloPrivado(int codVuelo,Cliente comprador, ArrayList<Cliente> acompañantes, double precioPorJet,int cantidadDeTripulantes, String origen, String destino, String salida, int impuestos,
+    		int tripulantes, String fechaArrivo, int cantTotalAsiento){
+    	super(codVuelo, tripulantes, origen, destino, salida, fechaArrivo, cantTotalAsiento, impuestos);
         this.comprador = comprador;
         this.acompañantes = acompañantes;
-
-        this.cantidadDeJets = calcularJetsNecesarios(acompañantes.size());
-        this.PrecioPorJet = precio;
+        this.cantidadDeJets = 0;
+        this.PrecioPorJet = precioPorJet;
         this.cantidadDeAsientosPorJet = 15;
-        this.costeTotal = calcularImpuesto(precio*cantidadDeJets);
+    }
     
+    public double precioFinal() {
+    	return 1.0;
+    }
+    public void sumarJet() {
+    	this.cantidadDeJets++;
     }
 
-    
-    //Metodos
-    private int calcularJetsNecesarios(int cantidadDeAcompañantes){
-        
-        int resultado = 0;
-
-        if(acompañantes.size() <= 15){
-
-            resultado = 1;
-
-        } else {
-
-            boolean bandera = true;
-            int i = 1;
-            int acum = cantidadDeAsientosPorJet;
-            while(bandera == true){
-
-                if(acum >= acompañantes.size()){
-                    bandera = false;
-                } else {
-
-                    acum += 15;
-                    i++;
-
-                }
-
-            }
-
-            resultado = i;
-
-        }
-
-        return resultado;
-
-    }
-
-    public int obtenerAsientosDisponibles() {
-
-        return cantidadDeAsientosPorJet * cantidadDeJets - acompañantes.size();
-
-    }
-
-    @Override
-    public double calcularImpuesto(double subTotal) {
-        
-        return subTotal += (subTotal*20)/100;
-
-    }
-
-    @Override
-    public double obtenerValorDelPasaje(Seccion area) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerValorDelPasaje'");
-    }
-
-    @Override
-    public void borrarPasajeroYAsiento(Pasajero pasajero, Asiento asiento) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'borrarPasajeroYAsiento'");
-    }
-
-    @Override
-    public Pasajero obtenerListaDePasajeros() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerListaDePasajeros'");
-    }
-
-    @Override
-    public Aeropuerto obtenerOrigen() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerOrigen'");
-    }
-
-    @Override
-    public Aeropuerto obtenerDestino() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerDestino'");
-    }
+  
 
 }

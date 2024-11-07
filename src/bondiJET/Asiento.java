@@ -13,8 +13,4 @@ public class Asiento {
     public int obtenerNumAsiento(){
         return this.numeroDeAsiento;
     }
-    
-    public void cambiarNumAsiento(int numAsiento) {
-    	this.numeroDeAsiento = numAsiento;
-    }
 }

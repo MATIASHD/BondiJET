@@ -6,55 +6,39 @@ public class Pasajero {
 	//Atributo
 	private Cliente cliente;
     private int refrigeriosConsumidos;
-    private ArrayList<Asiento> asientosAsignados;
+    private List<Asiento> asientosAsignados = new ArrayList<>();
     
     //Constructor
-    public Pasajero(Cliente cliente) {
+    public Pasajero(Cliente cliente, int refrigerio, ArrayList<Asiento> asiento) {
     	this.cliente = cliente;
-        this.asientosAsignados = new ArrayList<>();
+    	this.refrigeriosConsumidos = refrigerio;
+        this.asientosAsignados = asiento;
     }
 
     //Metodo
+    public boolean estaElAasiento(int numAsiento) {
+    	for (Asiento asiento : this.asientosAsignados) {
+    		if (asiento.numeroDeAsiento == numAsiento) {
+    			return true;
+    		};
+    	}
+    	return false;
+    }
+  
     public void asignarAsiento(Asiento asiento){
         this.asientosAsignados.add(asiento);
     }
-    public Asiento isAsientoAsignado(int numeroDeAsiento){
-        for (Asiento asiento : this.asientosAsignados) {
-            if(asiento.obtenerNumAsiento() == numeroDeAsiento) {
-            	return asiento;
-            }
-        }
-        return null;
+    
+    public Cliente obtenerCliente() {
+    	return cliente;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
-    public Cliente ObtenerPasajero(){
-        
-        return cliente;
-    }
-    
-
-    
 
     public void AsignarRefrigerio(int consumision){
-
-        refrigeriosConsumidos += consumision;
-
+        refrigeriosConsumidos = consumision;
     }
 
     public int ObtenerRefrigerio(){
-        
         return refrigeriosConsumidos;
     }
 

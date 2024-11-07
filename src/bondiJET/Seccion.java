@@ -1,20 +1,20 @@
 package bondiJET;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 
 public class Seccion {
 
 	//Atributo
     private String nombre;
     private double precio;
-    private ArrayList<Asiento> asientos;
+    private List<Asiento> asientos = new ArrayList<>();
 
     //Construtor
-    public Seccion(String nombre, double precio) {
+    public Seccion(String nombre, double precio, List<Asiento> asientos) {
     	this.nombre = nombre;
     	this.precio = precio;
-    	this.asientos = new  ArrayList<>();
+    	this.asientos = asientos;
     }
     
     //Metodo
@@ -24,8 +24,8 @@ public class Seccion {
     public double ObtenerPrecio(){
         return this.precio;
     }
-    public ArrayList<Asiento> ObtenerListaDeAsientos(){
-        return asientos;
+    public List<Asiento> ObtenerListaDeAsientos(){
+        return this.asientos;
     }
     
     public void agregarAsiento(Asiento asiento) {

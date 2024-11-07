@@ -3,13 +3,24 @@ package bondiJET;
 import java.util.*;
 
 public class Aerolinea {
+	/*
+	 * Usar Stringbulder
+	 * iteradores y foreach
+	 * herencia 
+	 * polimorfismo
+	 * sobreescritura
+	 * sobrecarga
+	 * interfaces
+	 * clases astracta
+	 * metodos astractos
+	 */
 	
 	//Atributo
 	private String nombre;
 	private String cuit;
-	private ArrayList<Aeropuerto> aeropuertos;
-	private ArrayList<Vuelo> vuelos;
-	private ArrayList<Cliente> clientes;
+	private List<Aeropuerto> aeropuertos;
+	private List<Vuelo> vuelos;
+	private List<Cliente> clientes;
 	
 	//Constructor
     public Aerolinea(String nombre, String cuit){
@@ -20,27 +31,117 @@ public class Aerolinea {
         this.clientes = new ArrayList<>();
     }
     
+    
     //Metodos
+    //2
+    public void registrarCliente(int dni, String nombre, String telefono) { 
+    	 if(!isCliente(dni)) {    		 
+    		 this.clientes.add(new Cliente(dni, nombre, telefono));
+    	 }
+    }
+    
+    public boolean isCliente(int dni) {
+    	for (Cliente cliente : this.clientes) {
+    		if(cliente.obtenerDNI() == dni) {    			
+    			return true;
+    		}
+		}
+    	return false;
+    }
+    
+    
+    //3
     public void registrarAeropuerto(String nombre, String pais, String provincia, String direccion) {
-        aeropuertos.add(new Aeropuerto(nombre, pais, provincia, direccion));
+    	if (!isAeropuerto(nombre, direccion)) {			
+    		this.aeropuertos.add(new Aeropuerto(nombre, pais, provincia, direccion));
+		}
      }
     
-    public void registrarCliente(int dni, String nombre, String telefono) {
-    	clientes.add(new Cliente(dni, nombre, telefono));
+    public boolean isAeropuerto(String nombre, String direccion) {
+    	for (Aeropuerto aero : this.aeropuertos) {
+    		if(aero.obtenerNombre() == nombre && aero.obtenerDireccion() == direccion) {    			
+    			return true;
+    		}
+		}
+    	return false;
     }
     
-    public String registrarVueloPublicoNacional(String origen, String destino, String fecha, int tripulantes, double valorRefrigerio, double[] precios, int[] cantAsientos) {
-    	vuelos.add( new VueloNacional(origen,destino,fecha,tripulantes,valorRefrigerio,precios,cantAsientos));
-    	return String.valueOf(vuelos.size() - 1);
+    //4
+    public String registrarVueloPublicoNacional(String origen, String destino, String fecha, int horasDuracion, double valorRefrigerio, double[] precios, int[] cantAsientos) {
+    	if(isValidoOrigenYDestino(origen, destino)) {    		
+    		vuelos.add(new VueloNacional(generarCodVuelo(),origen,destino ,fecha,String.valueOf(horasDuracion),0,valorRefrigerio,precios,cantAsientos, 20));
+    		return String.valueOf(generarCodVuelo());
+    	}
+    	return "";
+    }
+    public int generarCodVuelo() {
+    	return this.vuelos.size();
     }
     
-    public String registrarVueloPublicoInternacional(String origen, String destino, String fecha, int tripulantes, double valorRefrigerio, int seccion, double[] precios, int[] cantAsientos, String[] escalas) { 
-    	vuelos.add( new VueloInternacional(origen,destino,fecha,tripulantes,valorRefrigerio,seccion,precios,cantAsientos, escalas));
-    	return String.valueOf(vuelos.size() - 1);
+    public boolean isValidoOrigenYDestino(String origen, String destino) {
+    	for (Aeropuerto aeropuerto : aeropuertos) {
+			if (aeropuerto.obtenerNombre() == origen && aeropuerto.obtenerNombre() == destino ) {
+				return true;
+			}
+		}
+    	return false;
+    }
+    //5
+    public String registrarVueloPublicoInternacional(String origen, String destino, String salida, int horasDuracion, double valorRefrigerio,int cantidadRefrigerios, double[] precios, int[] cantAsientos, String[] escalas) { 
+    	if (isValidoOrigenYDestino(origen, destino)) {
+    		vuelos.add(new VueloInternacional(generarCodVuelo(),10, origen, destino, salida, String.valueOf(horasDuracion), 10, 30,escalas, valorRefrigerio));	
+    		return String.valueOf(generarCodVuelo());
+    	}
+    	
+    	return "";
+    }
+    //6
+    public String VenderVueloPrivado(String origen, String destino, String fecha,int horaDuracion, double precio, int dniComprador, int[] acompaniantes) {  
+    	//Destinos validos
+    	if (isValidoOrigenYDestino(origen, destino) && isCliente(dniComprador)) {
+    		vuelos.add(new VueloPrivado(generarCodVuelo(),buscarCliente(dniComprador), acompaniantes, precio,10,origen,destino, fecha, 0,15, String.valueOf(horaDuracion),acompaniantes.length,0));	
+    		return String.valueOf(generarCodVuelo());
+    	}
+    	//clientes registrados 
+        return "";
     }
     
-    public int venderPasaje(int dni, int codVuelo, int nroAsiento, boolean isOcupado) {
-    	Cliente cliente = BuscarCliente(dni);
+    //7
+    public boolean buscarNumAsiento(int codVuelo, int nroAsiento) {
+    	if(buscarCodVuelo(codVuelo)) {
+    		for (Vuelo vuelo : vuelos){
+    			//Si alguien tiene asignado el asiento, entonces no está disponible
+    			if(vuelo.obtenerCodVuelo() == codVuelo && estaDisponibleElAsiento(vuelo, nroAsiento)) {
+    				return true;
+    			}
+    		}
+    		return false;
+    	}
+    	return false;
+    }
+    
+  //VerificarSi estáOcupado
+    public boolean asientosDisponibles(String codVuelo) {
+    	for(Pasajero pasajero: vuelo.obtenerListaDePasajeros()) {
+    		//BuscarNumeroDeAsiento
+    		if(pasajero.isAsientoAsignado(numAsiento) == null) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    public boolean buscarRegistrado(int dni) {
+    	for (Cliente cliente : clientes) {
+			if(cliente.obtenerDNI() == dni) {
+				return true;
+			}
+		}
+    	return false;
+    }
+    //8
+    public int venderPasaje(int dni, String codVuelo, int nroAsiento, boolean isPreferencial) {
+    	Cliente cliente = buscarCliente(dni);
     	Pasajero pasajero = new Pasajero(cliente);
     	//El cliente esta registrado y BuscarCodigo de vuelo
     	if(buscarRegistrado(dni) && buscarCodVuelo(codVuelo)) {
@@ -59,43 +160,93 @@ public class Aerolinea {
     	}
 
     }
-    
-    
-    
-    
-    public boolean buscarNumAsiento(int codVuelo, int nroAsiento) {
-    	if(buscarCodVuelo(codVuelo)) {
-    		for (Vuelo vuelo : vuelos){
-    			//Si alguien tiene asignado el asiento, entonces no está disponible
-    			if(vuelo.obtenerCodVuelo() == codVuelo && estaDisponibleElAsiento(vuelo, nroAsiento)) {
-    				return true;
-    			}
+    //9
+    public int venderPasajeVueloInternacional(int dni, int codVuelo, int nroAsiento, String seccion) {
+    	Cliente cliente = buscarCliente(dni);
+    	Pasajero pasajero = new Pasajero(cliente);
+    	//El cliente esta registrado y BuscarCodigo de vuelo
+    	if(buscarRegistrado(dni) && buscarCodVuelo(codVuelo)) {
+    		if(buscarNumAsiento(codVuelo, nroAsiento)) {
+    			////////////////////////
+    			/// SE VENDE EL PASAJE
+    			////////////////////////
+    			for (Vuelo vuelo : vuelos){
+        			if(vuelo.obtenerCodVuelo() == codVuelo) {
+        				vuelo.obtenerListaDePasajeros().add(pasajero.asignarAsiento(nroAsiento));
+        			}
+        		}
     		}
-    		return false;
+    	
+    		
     	}
-    	return false;
+
     }
-  //VerificarSi estáOcupado
-    public boolean estaDisponibleElAsiento(Vuelo vuelo, int numAsiento) {
-    	for(Pasajero pasajero: vuelo.obtenerListaDePasajeros()) {
-    		//BuscarNumeroDeAsiento
-    		if(pasajero.isAsientoAsignado(numAsiento) == null) {
-    			return true;
+    //10
+    public int venderPasajeVueloPrivado(Cliente cliente, ArrayList<Pasajero> pasajero) { //Si supera la capacidad se crea otro vuelo
+    	Cliente cliente = buscarCliente(dni);
+    	Pasajero pasajero = new Pasajero(cliente);
+    	//El cliente esta registrado y BuscarCodigo de vuelo
+    	if(buscarRegistrado(dni) && buscarCodVuelo(codVuelo)) {
+    		if(buscarNumAsiento(codVuelo, nroAsiento)) {
+    			////////////////////////
+    			/// SE VENDE EL PASAJE
+    			////////////////////////
+    			for (Vuelo vuelo : vuelos){
+        			if(vuelo.obtenerCodVuelo() == codVuelo) {
+        				vuelo.obtenerListaDePasajeros().add(pasajero.asignarAsiento(nroAsiento));
+        			}
+        		}
     		}
+    	
+    		
     	}
-    	return false;
+
+    }
+    //11
+    public List<String> consultarVuelosSimilares(String origen, String destino, String Fecha) {
+    	//Devulve una lista con la lista de los vuelos similares por origen, destino y los proximos 7 dias
+        return null;
+    }
+    //12
+    //Tiene que ser O(1)
+    public void cancelarPasaje(int dni, String codVuelo, int nroAsiento) {
+    //Vuelve a estar a la venta
+    //Pasajero cliente registrado
+    }
+    //13
+    public List<String> cancelarVuelo(String codVuelo) {
+    	//reprogramar Cambiar fecha
+    	//return devulve los codigo del pasaje sin reasignar
+    	//reporgramar vuelos al igual destinos, sin importar las escalas, se debe informar
+        return null;
+    }
+    //14
+    public double totalRecaudado(String destino) {
+        return 0;
     }
     
-    public boolean buscarRegistrado(int dni) {
-    	for (Cliente cliente : clientes) {
-			if(cliente.obtenerDNI() == dni) {
-				return true;
-			}
-		}
-    	return false;
+    public String detalleDeVuelo(String codVuelo) {
+    	StringBuilder sb = new StringBuilder();
+    	
+    	return "";
+    	public class EjemploStringBuilder { //Usar StringBuilder para detalle
+    	    public static void main(String[] args) {
+    	        
+    	        sb.append("Hola");
+    	        sb.append(" ");
+    	        sb.append("Mundo");
+    	        
+    	        System.out.println(sb.toString()); // Salida: Hola Mundo
+    	    }
+    	}
     }
     
-    public Cliente BuscarCliente(int dni) {
+   /*
+    * Funciones auxiliares
+    *  
+    */
+    
+    public Cliente buscarCliente(int dni) {
     	for (Cliente cliente : clientes) {
 			if(cliente.obtenerDNI() == dni) {
 				return cliente;
@@ -108,11 +259,12 @@ public class Aerolinea {
     	if(codVuelo < 0 || codVuelo >= vuelos.size()) {
     		return false;
     	}
-    	if(vuelos.get(codVuelo) != null) {
-    		return true;
-    	} 
+    	for(Vuelo vuelo : this.vuelos) {
+			if (vuelo.obtenerCodDelVuelo() == codVuelo) {
+				return true;
+			}
+		}
     	return false;
-    	
     }
     
     
@@ -122,28 +274,15 @@ public class Aerolinea {
     }
     
     
-    public String VenderVueloPrivado(String origen, String destino, String fecha, int tripulantes, double precio,
-            int dniComprador, int[] acompaniantes) {  
-        return "";
-    }
+    
     public Map<Integer, String> asientosDisponibles(String codVuelo) {
         return null;
     }
     
-    public List<String> consultarVuelosSimilares(String origen, String destino, String Fecha) {
-        return null;
-    }
-    public void cancelarPasaje(int dni, String codVuelo, int nroAsiento) {
-    }
-    public void cancelarPasaje(int dni, int codPasaje) {
-    }
-    public List<String> cancelarVuelo(String codVuelo) {
-        return null;
-    }
-    public double totalRecaudado(String destino) {
-        return 0;
-    }
-    public String detalleDeVuelo(String codVuelo) {
-        return "";
-    }
+    
+    
+    
+    
+    
+    
 }

@@ -1,7 +1,5 @@
 package bondiJET;
 
-import java.util.*;
-
 public class Cliente {
 	//Atributo
 	private int dni;
@@ -10,9 +8,9 @@ public class Cliente {
 
     //Constructor
     public Cliente(int dni, String nombre, String telefono){
-        if(dni > 0) this.dni = dni;
-        if(nombre.length() > 0) this.nombre = nombre;
-        if(telefono.length() > 0) this.telefono = telefono;
+        this.dni = dni;
+        this.nombre = nombre;
+        this.telefono = telefono;
     }
 
     //Metodo
@@ -20,11 +18,11 @@ public class Cliente {
         return dni;
     }
 
-    public String ObtenerNombre(){
+    public String obtenerNombre(){
         return nombre;
     }
 
-    public String ObtenerTelefono(){
+    public String obtenerTelefono(){
         return telefono;
     }
 

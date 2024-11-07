@@ -2,19 +2,23 @@ package bondiJET;
 
 import java.util.*;
 
-public class VueloInternacional extends Vuelo {
+public class VueloInternacional extends Vuelo{
 	//Atributo
-	private ArrayList<Aeropuerto> aeropuertos;
-	private ArrayList<Seccion> secciones;
+	private List<String> aeropuertos = new ArrayList<>();
+	private String[] secciones;
+	private double[] valorSecciones;
+	private double ValorRefrigerio;
+	private int maxCantPasajero;
 	
 	//Constructor
-	public VueloInternacional(String origen, String destino, String fecha, int tripulantes, double valorRefrigerio, int seccion, double[] precios, int[] cantAsientos, String[] escalas) {
-		super(tripulantes, origen, destino, fecha, cantAsientos);	
-		this.aeropuertos = new ArrayList<>();
-		this.secciones = new ArrayList<>();
+	public VueloInternacional(int codVuelo, int tripulantes, String origen, String destino, String salida, String fechaArrivo, int cantTotalAsiento, int impuestos,
+			ArrayList<String> escalas, double ValorRefrigerio) {
+		super(codVuelo, tripulantes, origen, destino, salida, fechaArrivo, cantTotalAsiento, impuestos);
+		this.ValorRefrigerio = ValorRefrigerio;
+		this.aeropuertos = escalas;
+		this.secciones = new String[3];
+		this.valorSecciones = new double[2];
+		this.maxCantPasajero = 0;
 	}
-	
-	//Metodos
 
-	// (cantidadDeTripulantes, origen, destino, Salida, Llegada,cantidadDeAsientos){
 }
