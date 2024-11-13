@@ -1,8 +1,5 @@
 package bondiJET;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Map;
 
 public class VueloInternacional extends Vuelo{
 
@@ -26,6 +23,7 @@ public class VueloInternacional extends Vuelo{
             }
 
             inicializarSecciones(precios, cantAsientos);
+            setSufijo("-PUB");
             
             this.escalas = escalas;
             this.CANTIDAD_DE_REFRIGERIOS = cantRefrigerios;
@@ -112,4 +110,10 @@ public class VueloInternacional extends Vuelo{
 
     }
 
+    @Override
+    public String toString() {
+        
+        return super.toString() + "INTERNACIONAL";
+
+    }
 }

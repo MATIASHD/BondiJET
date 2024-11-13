@@ -1,7 +1,5 @@
 package bondiJET;
 
-import java.util.Map;
-
 public class VueloNacional extends Vuelo{
 
     private int CANTIDAD_DE_REFRIGERIOS;
@@ -20,6 +18,7 @@ public class VueloNacional extends Vuelo{
         }
         
         inicializarSecciones(precios, cantAsientos);
+        setSufijo("-PUB");
 
         CANTIDAD_DE_REFRIGERIOS = 1;
         if(valorRefrigerio >= 0) this.PRECIO_DEL_REFRIGERIO = valorRefrigerio;
@@ -30,7 +29,7 @@ public class VueloNacional extends Vuelo{
     public void inicializarSecciones(double[] precios, int[] cantidadDeAsientos){
 
         Seccion[] secciones = getSecciones();
-
+        
         secciones[0] = new Seccion("Clase Turista", 0, precios[0]);
         secciones[1] = new Seccion("Clase Ejecutivo", 1, precios[1]);
 
@@ -113,4 +112,10 @@ public class VueloNacional extends Vuelo{
 
     }
 
+    @Override
+    public String toString() {
+        
+        return super.toString() + "NACIONAL";
+
+    }
 }

@@ -2,12 +2,15 @@ package bondiJET;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public abstract class Vuelo{
 
-    private static int contador = 0;
-    private int codigoDeVuelo;
+    private static int contadorHash = 0;
+    private String codigoDeVuelo;
     private int cantidadDeTripulantes;
     private Aeropuerto origen;
     private Aeropuerto destino;
@@ -19,10 +22,10 @@ public abstract class Vuelo{
 
     public Vuelo(Aeropuerto origen, Aeropuerto destino, String FechaDesalida, int tripulantes, double porcentajeDeImpuesto, int cantSecciones){
 
-        if(validarAeropuertos(origen, destino)){
+        if(!validarAeropuertos(origen, destino)){
             throw new IllegalArgumentException("Error: el aeropuerto de origen o destino es inválido.");
         }
-        if(validarFecha(FechaDesalida) == false){
+        if(!validarFecha(FechaDesalida)){
             throw new IllegalArgumentException("Error: la fecha de salida es inválida.");
         }
         if(tripulantes <= 0){
@@ -32,10 +35,9 @@ public abstract class Vuelo{
             throw new IllegalArgumentException("Error: el porcentaje de impuesto no puede ser negativo.");
         }
 
-
         this.secciones = new Seccion[cantSecciones];
-        this.contador++;
-        this.codigoDeVuelo = hashCode();
+        this.contadorHash++;
+        this.codigoDeVuelo = "" + hashCode();
         this.origen = origen;
         this.destino = destino;
         this.fechaYhoraDeSalida = FechaDesalida;
@@ -44,9 +46,7 @@ public abstract class Vuelo{
         this.pasajeros = new HashMap<Integer, Pasajero>();
     }
 
-    public void inicializarSecciones(double[] precios, int[] cantidadDeAsientos){
-
-    }
+    public abstract void inicializarSecciones(double[] precios, int[] cantidadDeAsientos);
 
     public Seccion[] getSecciones(){
 
@@ -67,23 +67,18 @@ public abstract class Vuelo{
 
     private boolean validarFecha(String fecha){
 
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         try {
-            
-            Date fecha1 = formato.parse(fecha);
+            LocalDate fechaEntrada = LocalDate.parse(fecha, formateador);
+            LocalDate fechaAct = LocalDate.now();
 
-            Date fechaActual = new Date();
-            String fechaActualStr = formato.format(fechaActual);
-            Date fechaActualFormateada = formato.parse(fechaActualStr);
-
-            if(fecha1.after(fechaActualFormateada)){
-
+            if(fechaEntrada.isAfter(fechaAct)){
                 return true;
 
             } else return false;
 
-        } catch (ParseException ex) {
+        } catch (DateTimeParseException ex) {
 
             System.out.println(ex);
             return false;
@@ -91,16 +86,22 @@ public abstract class Vuelo{
 
     }
 
-    public int getCodigo(){
+    public String getCodigo(){
 
         return codigoDeVuelo;
+
+    }
+
+    public void setSufijo(String apendice){
+
+        this.codigoDeVuelo += apendice;
 
     }
 
     @Override
     public int hashCode() {
         
-        return contador;
+        return contadorHash;
     }
 
     private boolean validarAeropuertos(Aeropuerto origen, Aeropuerto destino){
@@ -223,7 +224,6 @@ public abstract class Vuelo{
             if(asientoACancelar != null){
             
                 asientoACancelar.liberar();
-                pasajero.eliminarAsiento(nroAsiento);
                 resultado = true;
             
             }
@@ -231,6 +231,20 @@ public abstract class Vuelo{
         }
 
         return resultado;
+
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(codigoDeVuelo + " - ");
+        sb.append(origen.getNombre() + " - ");
+        sb.append(destino.getNombre() + " - ");
+        sb.append(fechaYhoraDeSalida + " - ");
+
+        return sb.toString();
 
     }
 }

@@ -1,7 +1,9 @@
 package bondiJET;
 
 
-import java.util.*;
+import java.util.Map;
+
+import javax.management.RuntimeErrorException;
 
 public class VueloPrivado extends Vuelo{
 
@@ -20,11 +22,12 @@ public class VueloPrivado extends Vuelo{
         if(comprador == null){
             throw new IllegalArgumentException("Error: el comprador no está registrado en el sistema.");
         }
-        if(precio > 0){
+        if(precio < 0){
             throw new IllegalArgumentException("Error: el precio es negativo o 0");
         }
 
         Seccion[] seccion = getSecciones();
+        setSufijo("-PRI");
 
         seccion[0] = new Seccion("Seccion privada", precio);;
 
@@ -32,7 +35,6 @@ public class VueloPrivado extends Vuelo{
         this.acompañantes = acompañantes;
         this.cantidadDeJets = calcularJetsNecesarios(acompañantes.length);
         this.PRECIO_X_JET = precio;
-        this.CANTIDAD_DE_ASIENTOS_X_JET = 15;
         this.COSTE_TOTAL = calcularImpuesto(precio*cantidadDeJets);
     
     }
@@ -67,7 +69,7 @@ public class VueloPrivado extends Vuelo{
         } else {
 
             boolean bandera = true;
-            int asiento = 1;
+            int jets = 0;
             int acum = CANTIDAD_DE_ASIENTOS_X_JET;
             while(bandera == true){
 
@@ -76,13 +78,13 @@ public class VueloPrivado extends Vuelo{
                 } else {
 
                     acum += 15;
-                    asiento++;
+                    jets++;
 
                 }
 
             }
 
-            resultado = asiento;
+            resultado = jets;
 
         }
 
@@ -90,15 +92,28 @@ public class VueloPrivado extends Vuelo{
 
     }
 
-    public int obtenerAsientosDisponibles() {
-
-        return CANTIDAD_DE_ASIENTOS_X_JET * cantidadDeJets - (acompañantes.length+1);
-
-    }
-
     public double getCosteTotal() {
         
         return COSTE_TOTAL;
 
+    }
+
+    @Override
+    public void inicializarSecciones(double[] precios, int[] cantidadDeAsientos) {
+    
+        this.CANTIDAD_DE_ASIENTOS_X_JET = 15;
+
+    }
+
+    @Override
+    public String toString() {
+        
+        return super.toString() + "PRIVADO " + "(" + cantidadDeJets + ")";
+
+    }
+
+    @Override
+    public Map<Integer, String> getAsientosDisponibles() {
+        throw new RuntimeException();
     }
 }

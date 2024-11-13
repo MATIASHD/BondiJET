@@ -1,5 +1,6 @@
 package bondiJET;
 
+
 import java.util.*;
 
 public class Aerolinea implements IAerolinea {
@@ -48,20 +49,21 @@ public class Aerolinea implements IAerolinea {
     
         Aeropuerto nuevAeropuerto = new Aeropuerto(nombre, pais, provincia, direccion);
 
-        if(aeropuertoYaRegistrado(nuevAeropuerto)){
+        if(!aeropuertoYaRegistrado(nuevAeropuerto)){
             
             aeropuertos.add(nuevAeropuerto);
-        
         }
 
     }
 
     private boolean aeropuertoYaRegistrado(Aeropuerto aeropuertoBuscado){
+    
+        if(aeropuertos.size() > 0){
+            for (Aeropuerto aeropuerto : aeropuertos) {
+                
+                if(aeropuerto.equals(aeropuertoBuscado)) return true;
 
-        for (Aeropuerto aeropuerto : aeropuertos) {
-            
-            if(aeropuerto.equals(aeropuertoBuscado)) return true;
-
+            }
         }
 
         return false;
@@ -74,10 +76,9 @@ public class Aerolinea implements IAerolinea {
 
         for (Aeropuerto aeropuerto : aeropuertos) {
             
-            if(aeropuerto.getProvincia() == clave || aeropuerto.getNombre() == clave || aeropuerto.getDireccion() == clave){
+            if(aeropuerto.getProvincia().equals(clave) || aeropuerto.getNombre().equals(clave) || aeropuerto.getDireccion().equals(clave)){
 
-                if(aeropuerto.getPais() == "Argentina") aeropuertoSolicitado = aeropuerto; 
-
+                if(aeropuerto.getPais().equals("Argentina")) aeropuertoSolicitado = aeropuerto; 
             }
         }
 
@@ -105,7 +106,7 @@ public class Aerolinea implements IAerolinea {
         Aeropuerto aeropuertoSolicitado = null;
 
         for (Aeropuerto aeropuerto : aeropuertos) {
-            
+
             if(aeropuerto.getNombre() == nombre) aeropuertoSolicitado = aeropuerto;
 
         }
@@ -154,13 +155,18 @@ public class Aerolinea implements IAerolinea {
                 
         Aeropuerto AeropuertoOrigen = buscarAeropuertoNacional(origen);
         Aeropuerto AeropuertoDestino = buscarAeropuertoNacional(destino);
-        
-        VueloNacional nuevoVuelo = new VueloNacional(AeropuertoOrigen, AeropuertoDestino, fecha, tripulantes, precios, cantAsientos, valorRefrigerio);
 
-        String codigoDelDiccionario = nuevoVuelo.getCodigo() + "-PUB";
-        vuelos.put(codigoDelDiccionario, nuevoVuelo);
+        try {
 
-        return codigoDelDiccionario;
+            VueloNacional nuevoVuelo = new VueloNacional(AeropuertoOrigen, AeropuertoDestino, fecha, tripulantes, precios, cantAsientos, valorRefrigerio);
+    
+            vuelos.put(nuevoVuelo.getCodigo(), nuevoVuelo);
+    
+            return nuevoVuelo.getCodigo();
+            
+        } catch (IllegalArgumentException ex) {
+            throw ex;
+        }
     }
 
     @Override
@@ -177,12 +183,19 @@ public class Aerolinea implements IAerolinea {
 
         }
 
-        VueloInternacional nuevoVuelo = new VueloInternacional(aeropuertoOrigen, aeropuertoDestino, fecha, tripulantes, valorRefrigerio, cantRefrigerios, precios, cantAsientos, aeropuertosEscala);
+        try {
+            
+            VueloInternacional nuevoVuelo = new VueloInternacional(aeropuertoOrigen, aeropuertoDestino, fecha, tripulantes, valorRefrigerio, cantRefrigerios, precios, cantAsientos, aeropuertosEscala);
 
-        String codigoDelDiccionario = nuevoVuelo.getCodigo() + "-PUB";
-        vuelos.put(codigoDelDiccionario, nuevoVuelo);
+            vuelos.put(nuevoVuelo.getCodigo(), nuevoVuelo);
 
-        return codigoDelDiccionario;
+            return nuevoVuelo.getCodigo();
+
+        } catch (IllegalArgumentException ex) {
+
+            throw ex;
+
+        }
 
     }
 
@@ -206,18 +219,28 @@ public class Aerolinea implements IAerolinea {
     public String VenderVueloPrivado(String origen, String destino, String fecha, int tripulantes, double precio,
             int dniComprador, int[] acompaniantes) {
         
+        if(!clientes.containsKey(dniComprador)){
+            throw new IllegalArgumentException("Error: el dni ingresado no corresponde a ningún cliente registrado en el sistema.");
+        }
+
         Cliente comprador = clientes.get(dniComprador);
+
         Cliente[] pAcompañantes = buscarAcompañantes(acompaniantes);
 
         Aeropuerto aeropuertoOrigen = buscarAeropuertoNacional(origen);
         Aeropuerto aeropuertoDestino = buscarAeropuertoNacional(destino);
 
-        VueloPrivado nuevoVuelo = new VueloPrivado(comprador, pAcompañantes, precio, tripulantes, aeropuertoOrigen, aeropuertoDestino, fecha);
+        try {
+            
+            VueloPrivado nuevoVuelo = new VueloPrivado(comprador, pAcompañantes, precio, tripulantes, aeropuertoOrigen, aeropuertoDestino, fecha);
 
-        String codigoDelDiccionario = nuevoVuelo.getCodigo() + "-PRI";
-        vuelos.put(codigoDelDiccionario, nuevoVuelo);
+            vuelos.put(nuevoVuelo.getCodigo(), nuevoVuelo);
 
-        return codigoDelDiccionario;
+            return nuevoVuelo.getCodigo();
+
+        } catch (IllegalArgumentException ex) {
+            throw ex;
+        }
     }
 
     @Override
@@ -247,7 +270,14 @@ public class Aerolinea implements IAerolinea {
     @Override
     public void cancelarPasaje(int dni, String codVuelo, int nroAsiento) {
 
-        Vuelo vuelo = vuelos.get(codVuelo + "-PUB");
+        if(!vuelos.containsKey(codVuelo)){
+            throw new IllegalArgumentException("El código de vuelo ingresado no existe en el sistema.");
+        }
+        if(!clientes.containsKey(dni)){
+            throw new IllegalArgumentException("El DNI ingresado no corresponde a ningún cliente del sistema.");
+        }
+
+        Vuelo vuelo = vuelos.get(codVuelo);
 
         vuelo.cancelarPasaje(dni, nroAsiento);
 
@@ -274,8 +304,16 @@ public class Aerolinea implements IAerolinea {
 
     @Override
     public String detalleDeVuelo(String codVuelo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'detalleDeVuelo'");
+        
+        String detalleString = "Error: el código de vuelo ingresado es inválido";
+
+        if(vuelos.containsKey(codVuelo)){
+
+            Vuelo vuelo = vuelos.get(codVuelo);
+            detalleString = vuelo.toString();
+        }
+
+        return detalleString;
     }
 
     @Override
@@ -298,6 +336,10 @@ public class Aerolinea implements IAerolinea {
 
     @Override
     public Map<Integer, String> asientosDisponibles(String codVuelo) {
+        
+        if(!vuelos.containsKey(codVuelo)){
+            throw new IllegalArgumentException("Error: el código de vuelo ingresado es inválido.");
+        }
         
         Vuelo vuelo = vuelos.get(codVuelo);
 
