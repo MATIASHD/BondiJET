@@ -223,6 +223,7 @@ public abstract class Vuelo{
             if(asientoACancelar != null){
             
                 asientoACancelar.liberar();
+                pasajero.eliminarAsiento(nroAsiento);
                 resultado = true;
             
             }
