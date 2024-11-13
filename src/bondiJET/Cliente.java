@@ -1,29 +1,54 @@
 package bondiJET;
 
 public class Cliente {
-	//Atributo
-	private int dni;
+
+    public Cliente(int dni, String nombre, String telefono){
+
+        if(dni > 0) this.dni = dni;
+        if(validarNombre(nombre)) this.nombre = nombre;
+        if(validarTelefono(telefono)) this.telefono = telefono;
+
+    }
+
+    private int dni;
     private String nombre;
     private String telefono;
 
-    //Constructor
-    public Cliente(int dni, String nombre, String telefono){
-        this.dni = dni;
-        this.nombre = nombre;
-        this.telefono = telefono;
+    private boolean validarTelefono(String telefono){
+
+        Boolean telefonoValido = telefono.length() > 0 && telefono.matches("[0-9]+");
+
+        return telefonoValido;
     }
 
-    //Metodo
-    public int obtenerDNI(){
+    private boolean validarNombre(String nombre){
+
+        Boolean nombreValido = nombre.length() > 0 && nombre.matches("[a-zA-ZÁÉÍÓÚáéíóúÑñ]+");
+
+        return nombreValido;
+    }
+
+    public int getDni(){
+        
         return dni;
+
     }
 
-    public String obtenerNombre(){
+    public String getNombre(){
+
         return nombre;
+
     }
 
-    public String obtenerTelefono(){
+    public String getTelefono(){
+
         return telefono;
+
     }
 
+    @Override
+    public String toString() {
+    
+        return "Nombre: " + nombre + " DNI: " + dni + " Teléfono: " + telefono;
+    }
 }

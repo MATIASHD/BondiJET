@@ -1,35 +1,104 @@
 package bondiJET;
 
+
 import java.util.*;
 
 public class VueloPrivado extends Vuelo{
-	//"Aeroparque", "Bariloche", "07/01/2025", 4, 450000, 98765432, acompaniantes
-	//Atributos
-	private Cliente comprador;
-    private List<Cliente> acompañantes;
+
+    private Cliente comprador;
+    private Cliente[] acompañantes;
     private int cantidadDeJets;
-    private double PrecioPorJet;
-    private int cantidadDeAsientosPorJet;
+    private double PRECIO_X_JET;
+    private int CANTIDAD_DE_ASIENTOS_X_JET;
+    private double COSTE_TOTAL;
     
-    //Constructor
-    public VueloPrivado(int codVuelo,Cliente comprador, ArrayList<Cliente> acompañantes, double precioPorJet,int cantidadDeTripulantes, String origen, String destino, String salida, int impuestos,
-    		int tripulantes, String fechaArrivo, int cantTotalAsiento){
-    	super(codVuelo, tripulantes, origen, destino, salida, fechaArrivo, cantTotalAsiento, impuestos);
+    public VueloPrivado(Cliente comprador, Cliente[] acompañantes, double precio,
+                        int cantidadDeTripulantes, Aeropuerto origen, Aeropuerto destino, String fechaDeSalida){
+
+        super(origen, destino, fechaDeSalida, cantidadDeTripulantes, 30.0, 1);
+
+        if(comprador == null){
+            throw new IllegalArgumentException("Error: el comprador no está registrado en el sistema.");
+        }
+        if(precio > 0){
+            throw new IllegalArgumentException("Error: el precio es negativo o 0");
+        }
+
+        Seccion[] seccion = getSecciones();
+
+        seccion[0] = new Seccion("Seccion privada", precio);;
+
         this.comprador = comprador;
         this.acompañantes = acompañantes;
-        this.cantidadDeJets = 0;
-        this.PrecioPorJet = precioPorJet;
-        this.cantidadDeAsientosPorJet = 15;
+        this.cantidadDeJets = calcularJetsNecesarios(acompañantes.length);
+        this.PRECIO_X_JET = precio;
+        this.CANTIDAD_DE_ASIENTOS_X_JET = 15;
+        this.COSTE_TOTAL = calcularImpuesto(precio*cantidadDeJets);
+    
+    }
+
+    
+    public Cliente getComprador(){
+        
+        return comprador;
+
     }
     
-    public double precioFinal() {
-    	return 1.0;
+    public double getPrecioPorJet(){
+        
+        return PRECIO_X_JET;
+
     }
-    public void sumarJet() {
-    	this.cantidadDeJets++;
-    }
-    public double precioTotal() {
-    	return (this.obtenerImpuestos() * (this.PrecioPorJet * this.cantidadDeJets))/100 ;
     
+    public Cliente[] getAcompañantes() {
+
+        return acompañantes;
+    
+    }   
+    
+    private int calcularJetsNecesarios(int cantidadDeAcompañantes){
+        
+        int resultado = 0;
+        
+        if(cantidadDeAcompañantes <= 15){
+            
+            resultado = 1;
+            
+        } else {
+
+            boolean bandera = true;
+            int asiento = 1;
+            int acum = CANTIDAD_DE_ASIENTOS_X_JET;
+            while(bandera == true){
+
+                if(acum >= cantidadDeAcompañantes){
+                    bandera = false;
+                } else {
+
+                    acum += 15;
+                    asiento++;
+
+                }
+
+            }
+
+            resultado = asiento;
+
+        }
+
+        return resultado;
+
+    }
+
+    public int obtenerAsientosDisponibles() {
+
+        return CANTIDAD_DE_ASIENTOS_X_JET * cantidadDeJets - (acompañantes.length+1);
+
+    }
+
+    public double getCosteTotal() {
+        
+        return COSTE_TOTAL;
+
     }
 }

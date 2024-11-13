@@ -3,46 +3,42 @@ package bondiJET;
 import java.util.*;
 
 public class Pasajero {
-	//Atributo
-	private Cliente cliente;
+
+    private Cliente cliente;
     private int refrigeriosConsumidos;
-    private List<Asiento> asientosAsignados = new ArrayList<>();
-    
-    //Constructor
-    public Pasajero(Cliente cliente, int refrigerio, ArrayList<Asiento> asiento) {
-    	this.cliente = cliente;
-    	this.refrigeriosConsumidos = refrigerio;
-        this.asientosAsignados = asiento;
+
+    public Pasajero(Cliente cliente){
+
+        if(cliente == null){
+            throw new IllegalArgumentException("Error: Cliente nulo.");
+        }
+
+        this.refrigeriosConsumidos = 0;
+        this.cliente = cliente;
+
     }
 
-    //Metodo
-    public boolean estaElAasiento(int numAsiento) {
-    	for (Asiento asiento : this.asientosAsignados) {
-    		if (asiento.numeroDeAsiento == numAsiento) {
-    			return true;
-    		};
-    	}
-    	return false;
+    public Cliente getDatos(){
+        
+        return cliente;
     }
-    public void asignarAsiento(Asiento asiento){
-        this.asientosAsignados.add(asiento);
-    }
-    public Cliente obtenerCliente() {
-    	return cliente;
-    }
+
     public void AsignarRefrigerio(int consumision){
-        refrigeriosConsumidos = consumision;
+
+        refrigeriosConsumidos += consumision;
+
     }
 
-    public int ObtenerRefrigerio(){
+    public int getRefrigerio(){
+        
         return refrigeriosConsumidos;
     }
-    public void QuitarAsiento(int codAsiento) {
-    	for (Asiento asiento : asientosAsignados) {
-			if(asiento.obtenerNumAsiento() == codAsiento) {
-				asiento = null;
-			}
-		}
+
+    @Override
+    public String toString() {
+        
+        return "Datos del pasajero: Nombre: " + cliente.getNombre() + " DNI: " + cliente.getDni() + " telefono: " + cliente.getTelefono() + " refrigerios consumidos: " + refrigeriosConsumidos;
+
     }
 
 }

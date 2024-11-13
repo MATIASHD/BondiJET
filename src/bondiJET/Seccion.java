@@ -1,35 +1,102 @@
 package bondiJET;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 
 public class Seccion {
 
-	//Atributo
-    private String nombre;
-    private double precio;
-    private List<Asiento> asientos = new ArrayList<>();
+    public Seccion(String nombreDeSeccion, int numeroDeSeccion, double precio){
 
-    //Construtor
-    public Seccion(String nombre, double precio, List<Asiento> asientos) {
-    	this.nombre = nombre;
-    	this.precio = precio;
-    	this.asientos = asientos;
+        this.nombreDeSeccion = nombreDeSeccion;
+        this.numeroDeSeccion = numeroDeSeccion;
+        this.precio = precio;
+        asientos = new HashMap<>();
+
     }
-    
-    //Metodo
-    public String ObtenerNombreDeLaSeccion(){
-        return this.nombre;
+
+    public Seccion(String nombre, double precio){
+
+        this.nombreDeSeccion = nombre;
+        this.precio = precio;
     }
-    public double ObtenerPrecio(){
-        return this.precio;
+
+    private String nombreDeSeccion;
+    private int numeroDeSeccion;
+    private double precio;
+    private int cantidadDeAsientos;
+    private Map<Integer, Asiento> asientos;
+
+    public void setPrecio(double precioDeSeccion){
+
+        precio = precioDeSeccion;
     }
-    public List<Asiento> ObtenerListaDeAsientos(){
-        return this.asientos;
-    }
-    
-    public void agregarAsiento(Asiento asiento) {
-    	asientos.add(asiento);
-    }
+
+    public int getNumeroDeSeccion(){
         
+        return numeroDeSeccion;
+    }
+    
+    public double getPrecio(){
+        
+        return precio;
+    }
+    
+    public Map<Integer, Asiento> getListaDeAsientos(){
+        
+        return asientos;
+    }
+
+    public LinkedList<Asiento> getAsientosDisponibles(){
+
+        LinkedList<Asiento> asientosLibres = new LinkedList<>();
+            
+        for(int i = 0; i < asientos.size(); i++){
+
+            Asiento asiento = asientos.get(i);
+
+            if(asiento.getEstaComprado() == true) asientosLibres.addLast(asiento);
+
+        }
+
+        return asientosLibres;
+
+    }
+
+    public int getCantidadDeAsientos(){
+
+        return asientos.size();
+    }
+
+    public void AgregarAsiento(Asiento nuevoAsiento){
+        
+        asientos.put(nuevoAsiento.getNumeroDeAsiento(), nuevoAsiento);
+
+    }
+
+    public Asiento buscarAsiento(int numeroDeAsiento){
+
+        for (Asiento asiento : asientos.values()) {
+            
+            if(asiento.getNumeroDeAsiento() == numeroDeAsiento);
+
+            return asiento;
+
+        }
+
+        System.out.println("No existe un asiento con el número "+ numeroDeAsiento +"!");
+
+        return null;
+
+    }
+
+    @Override
+    public String toString() {
+        
+        return nombreDeSeccion + " " + numeroDeSeccion + " $" + precio;
+    }
+    
+    public String getNombreSeccion(){
+
+        return nombreDeSeccion;
+    }
 }
