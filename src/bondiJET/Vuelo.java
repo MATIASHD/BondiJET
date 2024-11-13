@@ -210,14 +210,26 @@ public abstract class Vuelo{
         if(aOcupar == true) asiento.ocupar(aOcupar);
         
     }   
-    public void cancelarPasaje(int dni, int nroAsiento){
+    
+    public boolean cancelarPasaje(int dni, int nroAsiento){
 
-        pasajeros.remove(dni);
+        Pasajero pasajero = pasajeros.get(dni);
+        boolean resultado = false;
 
-        Asiento asiento = asientos.get(nroAsiento);
+        if(pasajero != null){
 
-        asiento.liberar();
+            Asiento asientoACancelar = pasajero.getAsiento(nroAsiento);
 
-        asiento.liberar();
+            if(asientoACancelar != null){
+            
+                asientoACancelar.liberar();
+                resultado = true;
+            
+            }
+
+        }
+
+        return resultado;
+
     }
 }
