@@ -8,12 +8,14 @@ public class Asiento {
 
     public Asiento(int numeroAsiento, boolean comprado){
 
-        if(numeroAsiento > 0) this.numeroDeAsiento = numeroAsiento;
+        if(numeroAsiento < 0) {
+            throw new IllegalArgumentException("Error: el número de asiento no es válido");
+        }
+        
+        this.numeroDeAsiento = numeroAsiento;
         this.estaComprado = comprado;
         this.estaOcupado = false;
     }
-
-
 
     public int getNumeroDeAsiento(){
         
@@ -40,6 +42,7 @@ public class Asiento {
     public void liberar(){
 
         estaComprado = false;
+        if(estaOcupado == true) estaOcupado = false;
     }
 
     public void ocupar(Boolean aOcupar){
@@ -52,5 +55,5 @@ public class Asiento {
 
         return estaOcupado;
     }
-
 }
+

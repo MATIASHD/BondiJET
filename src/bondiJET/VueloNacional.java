@@ -38,6 +38,7 @@ public class VueloNacional extends Vuelo{
         setSecciones(secciones);
     }
 
+
     private Seccion[] cargarAsientos(Seccion[] secciones, int[] cantDeAsientosXSeccion){
 
         int CANTIDAD_TOTAL_DE_ASIENTOS = cantDeAsientosXSeccion[0] += cantDeAsientosXSeccion[1];
@@ -119,3 +120,4 @@ public class VueloNacional extends Vuelo{
 
     }
 }
+

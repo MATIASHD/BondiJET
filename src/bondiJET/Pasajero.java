@@ -76,4 +76,9 @@ public class Pasajero {
 
     }
 
+    public Cliente getCliente(){
+
+        return cliente;
+    }
+
 }

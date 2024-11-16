@@ -71,9 +71,20 @@ public abstract class Vuelo{
 
         try {
             LocalDate fechaEntrada = LocalDate.parse(fecha, formateador);
-            LocalDate fechaAct = LocalDate.now();
 
-            if(fechaEntrada.isAfter(fechaAct)){
+            /**
+             * Esta linea de código devuelve la fecha actual con el formato "dd/mm/yyyy", para descomentarla
+             * y que funcione bien, se debe ajustar las fechas de salida de los vuelos en la clase principal
+             * de otra manera, el método after() devolverá siempre "false" y no funcionará lo demás.
+             *  
+             * LocalDate fechaAct = LocalDate.now();
+             *  
+            **/
+
+            // esta linea crea una fecha actual falsa, solo está a modo de ejemplo.
+            LocalDate fechaActual = LocalDate.of(2024, 11, 5);
+
+            if(fechaEntrada.isAfter(fechaActual)){
                 return true;
 
             } else return false;
@@ -208,30 +219,38 @@ public abstract class Vuelo{
         pasajeros.put(comprador.getDni(), new Pasajero(comprador));
         Asiento asiento = asientos.get(nroAsiento);
         asiento.comprar();
+        Seccion seccionElegida = buscarSeccionDeAsiento(nroAsiento);
+        destino.aumentarRecaudacion(seccionElegida.getPrecio());
         if(aOcupar == true) asiento.ocupar(aOcupar);
         
     }   
-    
-    public boolean cancelarPasaje(int dni, int nroAsiento){
 
-        Pasajero pasajero = pasajeros.get(dni);
-        boolean resultado = false;
+    public void agregarPasajero(Pasajero pasajero){
 
-        if(pasajero != null){
-
-            Asiento asientoACancelar = pasajero.getAsiento(nroAsiento);
-
-            if(asientoACancelar != null){
+            Cliente cliente = pasajero.getCliente();
+            Seccion seccionVieja = null;
+            Map<Integer, Asiento> asientosViejos = pasajero.getAsientos();
             
-                asientoACancelar.liberar();
-                resultado = true;
             
+            for (Asiento asiento : asientosViejos.values()) {
+                
+                seccionVieja = buscarSeccionDeAsiento(asiento.getNumeroDeAsiento());
+                break;
+
             }
 
-        }
+            if(seccionVieja != null){
+                
+                pasajeros.put(cliente.getDni(), new Pasajero(cliente));
+                
+                for(Asiento asientoNuevo : seccionVieja.getAsientosDisponibles()){
 
-        return resultado;
+                    asientoNuevo.comprar();
+                    asientoNuevo.ocupar(true);
+                }
+            }
 
+    
     }
 
     @Override
@@ -247,4 +266,62 @@ public abstract class Vuelo{
         return sb.toString();
 
     }
+
+    private double buscarPrecioDelAsiento(int nroAsiento){
+
+        double precio = 0;
+
+        for (Seccion seccion : secciones) {
+            
+            if(seccion.contieneElAsiento(nroAsiento)) precio = seccion.getPrecio();
+
+        }
+
+        return precio;
+
+    }
+
+    public boolean cancelarPasaje(int dni, int nroAsiento) {
+        
+        boolean resultado = false;
+
+        if(pasajeros.containsKey(dni)){
+
+            Pasajero pasajero = pasajeros.get(dni);
+
+            if(pasajero.getAsiento(nroAsiento) != null){
+            
+                Asiento asientoACancelar = pasajero.getAsiento(nroAsiento);
+                double montoAbonado = buscarPrecioDelAsiento(nroAsiento);
+                
+                destino.restarRecaudacion(montoAbonado);
+                asientoACancelar.liberar();
+                
+
+                resultado = true;
+            
+            }
+
+        }
+
+        return resultado;
+    }
+
+    private Seccion buscarSeccionDeAsiento(int nroAsiento){
+
+        Seccion seccionBuscada = null;
+
+        for (Seccion seccion : secciones) {
+            
+            if(seccion.contieneElAsiento(nroAsiento)){
+
+                seccionBuscada = seccion;
+
+            }
+
+        }
+
+        return seccionBuscada;
+    }
+
 }

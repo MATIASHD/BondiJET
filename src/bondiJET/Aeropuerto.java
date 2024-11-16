@@ -4,10 +4,23 @@ public class Aeropuerto {
 
     public Aeropuerto(String nombre, String pais, String provincia, String direccion) {
     
-        if(nombre.length() > 0) this.nombre = nombre;
-        if(pais.length() > 0) this.pais = pais;
-        if(provincia.length() > 0) this.provincia = provincia;
-        if(direccion.length() > 0) this.direccion = direccion;
+        if(nombre.length() < 0){
+            throw new IllegalArgumentException("Error: el nombre ingresado es inválido.");
+        }
+        if(pais.length() < 0){
+            throw new IllegalArgumentException("Error: el pais ingresado es inválido.");
+        }
+        if(provincia.length() < 0){
+            throw new IllegalArgumentException("Error: la provincia ingresada es inválida.");
+        }
+        if(direccion.length() < 0){
+            throw new IllegalArgumentException("Error: la direción ingresada es inválida.");
+        }
+        
+        this.nombre = nombre;
+        this.pais = pais;
+        this.provincia = provincia;
+        this.direccion = direccion;
         this.recaudacion = 0.0;
 
     }
@@ -20,6 +33,18 @@ public class Aeropuerto {
 
     public void nuevoAeropuerto(){
         
+    }
+
+    public void restarRecaudacion(double monto){
+
+        recaudacion -= monto;
+
+    }
+
+    public void aumentarRecaudacion(double monto){
+
+        recaudacion += monto;
+
     }
 
     public String getNombre(){
@@ -55,7 +80,7 @@ public class Aeropuerto {
         boolean resultado = false;
         
         if(nombre.equals(aeropuerto.getNombre()) && pais.equals(aeropuerto.getPais()) && provincia.equals(aeropuerto.getProvincia()) &&
-            direccion.equals(aeropuerto.getDireccion()) && recaudacion.equals(aeropuerto.getRecaudacion())) resultado = true;
+            direccion.equals(aeropuerto.getDireccion()) && recaudacion == aeropuerto.getRecaudacion()) resultado = true;
 
         return resultado;
 
@@ -66,6 +91,20 @@ public class Aeropuerto {
         if(aeropuerto.pais == dato || aeropuerto.nombre == dato || aeropuerto.direccion == dato || aeropuerto.provincia == dato) return true;
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Nombre: " + nombre + "\n");
+        sb.append("Pais: " + pais + "\n");
+        sb.append("Provincia: " + provincia + "\n");
+        sb.append("Dirección: " + direccion + "\n");
+        sb.append("Recaudación del destino: " + recaudacion  + "\n");
+
+        return sb.toString();
     }
 
 }

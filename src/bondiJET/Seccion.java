@@ -46,15 +46,13 @@ public class Seccion {
         return asientos;
     }
 
-    public LinkedList<Asiento> getAsientosDisponibles(){
+    public List<Asiento> getAsientosDisponibles(){
 
         LinkedList<Asiento> asientosLibres = new LinkedList<>();
             
-        for(int i = 0; i < asientos.size(); i++){
-
-            Asiento asiento = asientos.get(i);
-
-            if(asiento.getEstaComprado() == true) asientosLibres.addLast(asiento);
+        for (Asiento asiento : asientosLibres) {
+            
+            if(asiento.getEstaComprado()) asientosLibres.addLast(asiento);
 
         }
 
@@ -98,5 +96,16 @@ public class Seccion {
     public String getNombreSeccion(){
 
         return nombreDeSeccion;
+    }
+
+    public boolean contieneElAsiento(int nroAsiento){
+
+        if(asientos.containsKey(nroAsiento)){
+
+            return true;
+
+        } else {
+            return false;
+        }
     }
 }

@@ -1,16 +1,21 @@
 package bondiJET;
 
-
 import java.util.*;
 
 public class Aerolinea implements IAerolinea {
 
     public Aerolinea(String nombre, String cuit){
 
-        if(nombre.length() > 0) this.nombre = nombre;
-        if(cuit.length() > 0) this.cuit = cuit;
+        if(nombre.length() < 0){
+            throw new IllegalArgumentException("Error: el nombre ingresado no es válido.");
+        }
+        if(cuit.length() < 0){
+            throw new IllegalArgumentException("Error: el CUIT ingresado no es válido.");
+        }
 
-        this.aeropuertos = new LinkedList<Aeropuerto>();
+        this.cuit = cuit;
+        this.nombre = nombre;
+        this.aeropuertos = new HashMap<String, Aeropuerto>();
         this.vuelos = new HashMap<String, Vuelo>();
         this.clientes = new HashMap<Integer, Cliente>();
 
@@ -18,131 +23,115 @@ public class Aerolinea implements IAerolinea {
 
     String nombre;
     String cuit;
-    LinkedList<Aeropuerto> aeropuertos;
+    Map<String, Aeropuerto> aeropuertos;
     Map<String, Vuelo> vuelos;
     Map<Integer, Cliente> clientes;
     
     public Aeropuerto getAeropuerto(String nombre){
 
-        Aeropuerto aeropuertoSolicitado = null;
-
-        for (Aeropuerto aeropuerto : aeropuertos) {
-            
-            if(aeropuerto.getNombre() == nombre) aeropuertoSolicitado = aeropuerto; 
-
+        if(!aeropuertos.containsKey(nombre)){
+            throw new NullPointerException("El aeropuerto ingresado no existe.");
         }
-
+        
+        Aeropuerto aeropuertoSolicitado = aeropuertos.get(nombre);
+        
         return aeropuertoSolicitado;
 
     }
 
     public void registrarCliente(int dni, String nombre, String telefono) {
 
-        if(!clientes.containsKey(dni)){
+        try {
          
-            clientes.put(dni, new Cliente(dni, nombre, telefono));
-        
+            if(!clientes.containsKey(dni)){
+            
+                clientes.put(dni, new Cliente(dni, nombre, telefono));
+            
+            }
+            
+        } catch (IllegalArgumentException ex) {
+            throw ex;
         }
     }
 
     public void registrarAeropuerto(String nombre, String pais, String provincia, String direccion) {
     
-        Aeropuerto nuevAeropuerto = new Aeropuerto(nombre, pais, provincia, direccion);
+        try {
 
-        if(!aeropuertoYaRegistrado(nuevAeropuerto)){
-            
-            aeropuertos.add(nuevAeropuerto);
+            Aeropuerto nuewvoAeropuerto = new Aeropuerto(nombre, pais, provincia, direccion);
+
+            if(!aeropuertos.containsKey(nombre)) aeropuertos.put(nombre, nuewvoAeropuerto);
+
+        } catch (IllegalArgumentException ex) {
+            throw ex;
         }
-
     }
 
-    private boolean aeropuertoYaRegistrado(Aeropuerto aeropuertoBuscado){
-    
-        if(aeropuertos.size() > 0){
-            for (Aeropuerto aeropuerto : aeropuertos) {
-                
-                if(aeropuerto.equals(aeropuertoBuscado)) return true;
+    private Aeropuerto buscarAeropuertoNacional(String nombreAeropuerto){
 
-            }
+        if(!aeropuertos.containsKey(nombreAeropuerto)){
+            throw new NullPointerException("Error: no existe el aeropuerto solicitado.");
         }
 
-        return false;
+        Aeropuerto aeropuertoSolicitado = aeropuertos.get(nombreAeropuerto);
 
-    }
-
-    private Aeropuerto buscarAeropuertoNacional(String clave){
-
-        Aeropuerto aeropuertoSolicitado = null;
-
-        for (Aeropuerto aeropuerto : aeropuertos) {
-            
-            if(aeropuerto.getProvincia().equals(clave) || aeropuerto.getNombre().equals(clave) || aeropuerto.getDireccion().equals(clave)){
-
-                if(aeropuerto.getPais().equals("Argentina")) aeropuertoSolicitado = aeropuerto; 
-            }
+        if(!aeropuertoSolicitado.getPais().equals("Argentina")){
+            return null;
         }
 
         return aeropuertoSolicitado;
     }
    
-    private Aeropuerto buscarAeropuertoInternacional(String clave){
+    private Aeropuerto buscarAeropuertoInternacional(String nombreAeropuerto){
         
-        Aeropuerto aeropuertoSolicitado = null;
-        
-        for (Aeropuerto aeropuerto : aeropuertos) {
-            
-            if(aeropuerto.getProvincia() == clave || aeropuerto.getNombre() == clave || aeropuerto.getDireccion() == clave){
-                
-                if(aeropuerto.getPais() != "Argentina") aeropuertoSolicitado = aeropuerto; 
-                
-            }
+        if(!aeropuertos.containsKey(nombreAeropuerto)){
+            throw new NullPointerException("Error: no existe el aeropuerto solicitado.");
         }
-        
-        return aeropuertoSolicitado;
-    }
 
-    private Aeropuerto buscarAeropuertoPorNombre(String nombre){
+        Aeropuerto aeropuertoSolicitado = aeropuertos.get(nombreAeropuerto);
 
-        Aeropuerto aeropuertoSolicitado = null;
-
-        for (Aeropuerto aeropuerto : aeropuertos) {
-
-            if(aeropuerto.getNombre() == nombre) aeropuertoSolicitado = aeropuerto;
-
+        if(aeropuertoSolicitado.getPais().equals("Argentina")){
+            return null;
         }
 
         return aeropuertoSolicitado;
-
     }
-    
-    private Aeropuerto[] buscarEscalas(Aeropuerto origen, String[] aeropuertosEscala){
+   
+    private Aeropuerto[] buscarEscalas(Aeropuerto origen, Aeropuerto destino, String[] aeropuertosEscala){
 
         Aeropuerto[] escalas = new Aeropuerto[aeropuertosEscala.length];
 
-        for(int i = 0; i < aeropuertosEscala.length; i++){
+        try {
+            
+            for(int i = 0; i < aeropuertosEscala.length; i++){
 
-            escalas[i] = buscarAeropuertoPorNombre(aeropuertosEscala[i]);
+                escalas[i] = aeropuertos.get(aeropuertosEscala[i]);
 
-            if(escalas[i] == null || !escalas[i].equals(origen)){
+                if(escalas[i].equals(origen) || escalas[i].equals(destino)){
 
-                System.out.println("ERROR: el aeropuerto escala no existe.");
-                return null;
+                    throw new RuntimeException("Error: una escala no pueden ser igual al origen ni al destino.");
+
+                }
 
             }
 
-        }
+            return escalas;
 
-        return escalas;
+        } catch (NullPointerException ex) {
+            throw ex;
+        } catch (RuntimeException ex){
+            throw ex;
+        }
 
     }
   
-    private Aeropuerto[] cargarEscalas(Aeropuerto origen, String[] escalas){
+    private Aeropuerto[] cargarEscalas(Aeropuerto origen, Aeropuerto destino, String[] escalas){
 
         if(escalas.length > 0){
 
             Aeropuerto[] aeropuertosEscala = null;
         
-            aeropuertosEscala = buscarEscalas(origen, escalas);
+            aeropuertosEscala = buscarEscalas(origen, destino, escalas);
             
             return aeropuertosEscala;
     
@@ -162,6 +151,7 @@ public class Aerolinea implements IAerolinea {
     
             vuelos.put(nuevoVuelo.getCodigo(), nuevoVuelo);
     
+            System.out.println("MIRA ACAAAA: "+nuevoVuelo.getCodigo() + nuevoVuelo.getDestino().getNombre());
             return nuevoVuelo.getCodigo();
             
         } catch (IllegalArgumentException ex) {
@@ -175,13 +165,7 @@ public class Aerolinea implements IAerolinea {
     
         Aeropuerto aeropuertoOrigen = buscarAeropuertoNacional(origen);
         Aeropuerto aeropuertoDestino = buscarAeropuertoInternacional(destino);
-        Aeropuerto[] aeropuertosEscala = null;
-
-        if(escalas.length > 0) {
-
-            aeropuertosEscala = cargarEscalas(aeropuertoOrigen, escalas);
-
-        }
+        Aeropuerto[] aeropuertosEscala = cargarEscalas(aeropuertoOrigen, aeropuertoDestino, escalas);
 
         try {
             
@@ -196,7 +180,6 @@ public class Aerolinea implements IAerolinea {
             throw ex;
 
         }
-
     }
 
     private Cliente[] buscarAcompañantes(int[] DNI){
@@ -205,11 +188,16 @@ public class Aerolinea implements IAerolinea {
 
         for(int i = 0; i < DNI.length; i++){
 
+            if(clientes.containsKey(DNI[i])){
+
             acompañantes[i] = clientes.get(DNI[i]);
 
+            } else {
+
+                System.out.println("No existe ningún cliente con el DNI: " + DNI[i]);
+
+            }
         }
-
-
 
         return acompañantes;
 
@@ -235,6 +223,7 @@ public class Aerolinea implements IAerolinea {
             VueloPrivado nuevoVuelo = new VueloPrivado(comprador, pAcompañantes, precio, tripulantes, aeropuertoOrigen, aeropuertoDestino, fecha);
 
             vuelos.put(nuevoVuelo.getCodigo(), nuevoVuelo);
+            aeropuertoDestino.aumentarRecaudacion(precio);
 
             return nuevoVuelo.getCodigo();
 
@@ -286,20 +275,67 @@ public class Aerolinea implements IAerolinea {
 
     @Override
     public void cancelarPasaje(int dni, int codPasaje) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'cancelarPasaje'");
     }
 
     @Override
     public List<String> cancelarVuelo(String codVuelo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'cancelarVuelo'");
+        
+        LinkedList<String> a = new LinkedList<>();
+
+        if(vuelos.containsKey(codVuelo)){
+            
+            Vuelo vuelo = vuelos.get(codVuelo);
+            Aeropuerto destino1 = vuelo.getDestino();
+            List<Vuelo> vuelosConMismoDestino = buscarVueloPorDestino(destino1.getNombre());
+            
+            //esto tiene que devolver la lista de pasajeros que no se pudieron reasignar.
+            reprogramarVuelo(vuelo, vuelosConMismoDestino);
+        
+
+        
+        }
+
+        return a;
+    }
+
+    private void reprogramarVuelo(Vuelo vueloInicial, List<Vuelo> vuelosConMismoDestino){
+
+        Map<Integer, Pasajero> pasajeros = vueloInicial.getPasajeros();
+
+        for (Vuelo vuelo : vuelosConMismoDestino) {
+            
+            for (Pasajero pasajero : pasajeros.values()) {
+
+                vuelo.agregarPasajero(pasajero);
+                
+            }
+
+        }
+
+    }
+
+    private List<Vuelo> buscarVueloPorDestino(String nombre){
+
+        LinkedList<Vuelo> vuelosConMismoDestino = new LinkedList<>();
+
+        for (Vuelo vuelo : vuelos.values()) {
+            
+            Aeropuerto aeropuerto = vuelo.getDestino();
+            String nombreAeropuerto = aeropuerto.getNombre();
+
+            if(nombreAeropuerto.equals(nombre)) vuelosConMismoDestino.add(vuelo);
+
+        }
+
+        return vuelosConMismoDestino;
     }
 
     @Override
     public double totalRecaudado(String destino) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'totalRecaudado'");
+        
+        Aeropuerto aeropuertoSolicitado = getAeropuerto(destino);
+
+        return aeropuertoSolicitado.getRecaudacion();
     }
 
     @Override
@@ -342,9 +378,43 @@ public class Aerolinea implements IAerolinea {
         }
         
         Vuelo vuelo = vuelos.get(codVuelo);
-
-        return vuelo.getAsientosDisponibles();
+        Map<Integer, String> asientosDisponibles = vuelo.getAsientosDisponibles();
         
+        return asientosDisponibles;
+        
+    }
+
+    @Override
+    public String toString() {
+        
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n-------------------------Vuelos registrados-------------------------\n\n");
+
+        for (Vuelo vuelo : vuelos.values()) {
+
+            sb.append(vuelo.toString() + "\n");
+            
+        }
+
+        sb.append("\n-------------------------Clientes registrados-------------------------\n\n");
+
+        for (Cliente cliente : clientes.values()) {
+            
+            sb.append(cliente.toString() + "\n");
+
+        }
+
+        sb.append("\n-------------------------Aeropuertos registrados-------------------------\n\n");
+
+        for (Aeropuerto aeropuerto : aeropuertos.values()) {
+            
+            sb.append(aeropuerto.toString() + "\n");
+
+        }
+
+        return sb.toString();
+
     }
 
 }

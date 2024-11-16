@@ -1,9 +1,6 @@
 package bondiJET;
 
-
 import java.util.Map;
-
-import javax.management.RuntimeErrorException;
 
 public class VueloPrivado extends Vuelo{
 
