@@ -26,6 +26,11 @@ public class VueloNacional extends Vuelo{
     }
 
     @Override
+    public double getCosteTotal() {
+        return 0;
+
+    }
+    @Override
     public void inicializarSecciones(double[] precios, int[] cantidadDeAsientos){
 
         Seccion[] secciones = getSecciones();

@@ -9,7 +9,7 @@ public class VueloPrivado extends Vuelo{
     private int cantidadDeJets;
     private double PRECIO_X_JET;
     private int CANTIDAD_DE_ASIENTOS_X_JET;
-    private double COSTE_TOTAL;
+    
     
     public VueloPrivado(Cliente comprador, Cliente[] acompañantes, double precio,
                         int cantidadDeTripulantes, Aeropuerto origen, Aeropuerto destino, String fechaDeSalida){
@@ -26,13 +26,13 @@ public class VueloPrivado extends Vuelo{
         Seccion[] seccion = getSecciones();
         setSufijo("-PRI");
 
-        seccion[0] = new Seccion("Seccion privada", precio);;
+        seccion[0] = new Seccion("Seccion privada", precio);
 
         this.comprador = comprador;
         this.acompañantes = acompañantes;
         this.cantidadDeJets = calcularJetsNecesarios(acompañantes.length);
         this.PRECIO_X_JET = precio;
-        this.COSTE_TOTAL = calcularImpuesto(precio*cantidadDeJets);
+       
     
     }
 
@@ -88,11 +88,11 @@ public class VueloPrivado extends Vuelo{
         return resultado;
 
     }
-
+    
+    @Override
     public double getCosteTotal() {
-        
-        return COSTE_TOTAL;
-
+        double cantidadDePasajero = this.acompañantes.length* this.PRECIO_X_JET;
+    	return cantidadDePasajero;
     }
 
     @Override

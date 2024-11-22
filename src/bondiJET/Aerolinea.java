@@ -1,9 +1,10 @@
 package bondiJET;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 public class Aerolinea implements IAerolinea {
-
+	
     public Aerolinea(String nombre, String cuit){
 
         if(nombre.length() < 0){
@@ -42,28 +43,29 @@ public class Aerolinea implements IAerolinea {
     public void registrarCliente(int dni, String nombre, String telefono) {
 
         try {
-         
+        	
             if(!clientes.containsKey(dni)){
-            
-                clientes.put(dni, new Cliente(dni, nombre, telefono));
-            
+            	System.out.println(dni);
+            	clientes.put(dni, new Cliente(dni, nombre, telefono));
             }
             
-        } catch (IllegalArgumentException ex) {
-            throw ex;
+        } catch (Exception e) {
+        	throw new RuntimeException("El cliente se encuentra registrado");            
         }
     }
 
     public void registrarAeropuerto(String nombre, String pais, String provincia, String direccion) {
     
         try {
+        	if(aeropuertos.containsKey(nombre)){
+            	System.out.println("AEROPUERTO");
+            	throw new RuntimeException("El cliente se encuentra registrado");            
+            }
+            Aeropuerto nuevoAeropuerto = new Aeropuerto(nombre, pais, provincia, direccion);
+            aeropuertos.put(nombre, nuevoAeropuerto);
 
-            Aeropuerto nuewvoAeropuerto = new Aeropuerto(nombre, pais, provincia, direccion);
-
-            if(!aeropuertos.containsKey(nombre)) aeropuertos.put(nombre, nuewvoAeropuerto);
-
-        } catch (IllegalArgumentException ex) {
-            throw ex;
+        } catch (RuntimeException ex) {
+            System.out.println(ex);
         }
     }
 
@@ -151,7 +153,7 @@ public class Aerolinea implements IAerolinea {
     
             vuelos.put(nuevoVuelo.getCodigo(), nuevoVuelo);
     
-            System.out.println("MIRA ACAAAA: "+nuevoVuelo.getCodigo() + nuevoVuelo.getDestino().getNombre());
+            //System.out.println("MIRA ACAAAA: "+nuevoVuelo.getCodigo() + nuevoVuelo.getDestino().getNombre());
             return nuevoVuelo.getCodigo();
             
         } catch (IllegalArgumentException ex) {
@@ -294,7 +296,8 @@ public class Aerolinea implements IAerolinea {
 
         
         }
-
+        System.out.println("TAMAÑO DEL ARRAY");
+        System.out.println(a.size());
         return a;
     }
 
@@ -332,10 +335,37 @@ public class Aerolinea implements IAerolinea {
 
     @Override
     public double totalRecaudado(String destino) {
-        
-        Aeropuerto aeropuertoSolicitado = getAeropuerto(destino);
-
-        return aeropuertoSolicitado.getRecaudacion();
+    	
+    	for (Map.Entry<String, Vuelo>fly : vuelos.entrySet()) {
+    		calcularCostoInternacional();
+    		//Buscamos destinos
+    		if(fly.getValue().getDestino().getNombre().equalsIgnoreCase(destino)) {
+    			//Verificamos si es nacional o privado (seccion 1 = jet O mayor a 1 nacional)
+    			if(fly.getValue() instanceof VueloPrivado) {
+    				return Double.parseDouble(String.valueOf(new BigDecimal(fly.getValue().getCosteTotal()) ) );    				
+    			}
+    			if(fly.getValue() instanceof VueloInternacional) {
+    				
+    				
+    			}
+    		}
+			
+		}
+    	return 0.0;
+    }
+    
+    public void calcularCostoInternacional() {
+    	for (Map.Entry<String, Vuelo>fly : vuelos.entrySet()) {
+    		System.out.println("DATO VUELTO INTERNACIONAL");
+    		
+    	}
+    	// Al estar vendido por completo, 
+	    // se suman el costo de todos los asiento que cambia segun la sección..
+    	
+	    // mas el costo de los refrigerios para todos los pasajeros
+	    // 140 pasajeros * 3 refrigerios * 2000 cada refrigerio 
+	    // y por ultimo sumo el 20 porciento de impuestos.
+	    
     }
 
     @Override
@@ -351,22 +381,31 @@ public class Aerolinea implements IAerolinea {
 
         return detalleString;
     }
+    
+    public void buscarPorDestino(String destino) {
+    	for (Map.Entry<String, Vuelo> vuelo : vuelos.entrySet()) {
+			Vuelo fly = vuelo.getValue();
+			System.out.println(fly);
+		}
+    }
 
     @Override
     public int venderPasaje(int dni, String codVuelo, int nroAsiento, boolean aOcupar) {
         
-        if(!clientes.containsKey(dni) || clientes.get(dni) == null){
+        if(clientes.get(dni) == null || !clientes.containsKey(dni) ){
             throw new IllegalArgumentException("Error: solo los clientes registrados pueden comprar pasajes.");
         }
-        if(!vuelos.containsKey(codVuelo) || vuelos.get(codVuelo) == null){
+        if(vuelos.get(codVuelo).getAsientosDisponibles() == null || vuelos.get(codVuelo) == null || !vuelos.containsKey(codVuelo) ){
             throw new IllegalArgumentException("Error: el vuelo ingresado no existe.");
+        } else {
+        	Cliente comprador = clientes.get(dni);
+            Vuelo vuelo = vuelos.get(codVuelo);
+           
+            vuelo.agregarPasajero(comprador, nroAsiento, aOcupar);
+          
         }
-
-        Cliente comprador = clientes.get(dni);
-        Vuelo vuelo = vuelos.get(codVuelo);
-
-        vuelo.agregarPasajero(comprador, nroAsiento, aOcupar);
-
+        
+        
         return 1;
     }
 

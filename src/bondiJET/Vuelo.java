@@ -58,6 +58,10 @@ public abstract class Vuelo{
         asientos.put(asiento.getNumeroDeAsiento(), asiento);
 
     }
+    
+    public Map<Integer, Asiento> listaDePasajeros(){
+    	return  this.asientos;
+    }
 
     public void setSecciones(Seccion[] listaSecciones){
 
@@ -111,7 +115,7 @@ public abstract class Vuelo{
 
     @Override
     public int hashCode() {
-        
+       
         return contadorHash;
     }
 
@@ -165,6 +169,9 @@ public abstract class Vuelo{
         return subTotal += (subTotal*IMPUESTO)/100;
 
     }
+    
+    //Costo 
+    public abstract double getCosteTotal();
 
     public Map<Integer, String> getAsientosDisponibles() {
         
@@ -218,9 +225,12 @@ public abstract class Vuelo{
     
         pasajeros.put(comprador.getDni(), new Pasajero(comprador));
         Asiento asiento = asientos.get(nroAsiento);
-        asiento.comprar();
-        Seccion seccionElegida = buscarSeccionDeAsiento(nroAsiento);
-        destino.aumentarRecaudacion(seccionElegida.getPrecio());
+        System.out.println(asiento);
+        if(asiento != null) {        	
+        	asiento.comprar();
+        	Seccion seccionElegida = buscarSeccionDeAsiento(nroAsiento);
+        	destino.aumentarRecaudacion(seccionElegida.getPrecio());
+        }
         if(aOcupar == true) asiento.ocupar(aOcupar);
         
     }   

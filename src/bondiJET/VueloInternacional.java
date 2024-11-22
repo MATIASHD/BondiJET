@@ -30,6 +30,11 @@ public class VueloInternacional extends Vuelo{
             this.PRECIO_DEL_REFRIGERIO = valorRefrigerio;
             
     }
+    @Override
+    public double getCosteTotal() {
+        return 0;
+
+    }
 
     @Override
     public void inicializarSecciones(double[] precios, int[] cantidadDeAsientos){
